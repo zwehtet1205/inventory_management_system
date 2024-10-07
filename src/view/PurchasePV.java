@@ -1,15 +1,19 @@
 package view;
 
 
+import java.net.URL;
+import java.util.Optional;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import model.*;
-import view.templates.ViewCard;
+import view.templates.*;
 
 public class PurchasePV {
-	private Label lDate,lSupplier,lWarehouse,lPaymentType,lStatus,lErr,
+	private Label lDate,lSupplier,lWarehouse,lPaymentType,lErr,
 					lItemCode,lItemName,lItemPrice,lQty,
 					lInvoiceNo,lInvoiceNoResults,lInvoiceDate,lInvoiceDateResults,
 					lDiscountPercent,lDiscount,lDiscountResults,lSubTotal,lSubTotalResults,lTotal,lTotalResults;
@@ -18,7 +22,6 @@ public class PurchasePV {
 	private ComboBox<String> cbBSupplier,cbBWarehouse,cbBPaymentType;
 	
 	private TextField tCode,tName,tPrice,tQty,tDiscountPercent;
-	private CheckBox cBStatus;
 	
 	
 	private Button btnCancel,btnAdd,btnUpdate,btnSave,btnUnsave,btnDateReload;
@@ -29,11 +32,13 @@ public class PurchasePV {
 	private TableColumn<Purchase,Double> priceCol,totalCol;
 	
 	private ViewCard purchaseCard,addCard, totalCard;
+	private Voucher voucher;
 	
 	private GridPane purchaseGP,addGP,totalGP;
 	private FlowPane btnFP;
 	private HBox totalHB;
 	private VBox contentVB;
+
 	
 	public PurchasePV() {
 		createNodes();
@@ -53,7 +58,6 @@ public class PurchasePV {
 		lSupplier = new Label("Supplier Name");
 		lWarehouse = new Label("Warehouse Name");
 		lPaymentType = new Label("Payment Type");
-		lStatus = new Label("Status");
 		
 		lItemCode = new Label("Item Code");
 		lItemName = new Label("Item Name");
@@ -88,10 +92,7 @@ public class PurchasePV {
 		tPrice = new TextField();
 		tQty = new TextField();
 		
-		tDiscountPercent = new TextField();
-		
-		cBStatus = new CheckBox();
-		cBStatus.setSelected(true);
+		tDiscountPercent = new TextField();		
 		
 		btnCancel = new Button("Cancel");
 		btnAdd = new Button("Add");
@@ -132,9 +133,7 @@ public class PurchasePV {
 		addGP.add(tQty, 1, 2);
 		addGP.add(lItemPrice, 0, 3);
 		addGP.add(tPrice, 1, 3);
-		addGP.add(lStatus, 0, 4);
-		addGP.add(cBStatus, 1, 4);
-		addGP.add(btnFP, 0, 5);
+		addGP.add(btnFP, 0, 4);
 		
 		GridPane.setColumnSpan(btnFP, 2);
 		
@@ -164,8 +163,15 @@ public class PurchasePV {
 		totalCard = new ViewCard(new Label("Invoice Information"));
 		totalCard.add(totalHB);
 		
+		
+		voucher = new Voucher();
+		
 		contentVB = new VBox(10,purchaseCard.getCard(),new HBox(10,tvPurchases,addCard.getCard()),totalCard.getCard());
 			
+		
+//		contentVB = new VBox(10,new Voucher().getReport());
+		
+		
 	
 	}
 	
@@ -217,7 +223,30 @@ public class PurchasePV {
 	}
 	
 	
+	public void createVoucher() {
+		Alert alt = new Alert(AlertType.CONFIRMATION);
+		alt.setHeaderText("");
+		alt.getDialogPane().setGraphic(voucher.getReport());
+		
+		alt.getDialogPane().getChildren().getFirst().getStyleClass().add("dia");
+		URL url = this.getClass().getResource("style.css");
+		alt.getDialogPane().getStylesheets().add(url.toExternalForm());
+		alt.getDialogPane().setMaxWidth(200);
+		Optional<ButtonType> ans = alt.showAndWait();
+		if(ans.isPresent() && ans.get()==ButtonType.OK)
+		{
+			
+		}
+	}
 	
+	public Voucher getVoucher() {
+		return voucher;
+	}
+
+	public void setVoucher(Voucher voucher) {
+		this.voucher = voucher;
+	}
+
 	public Label getlDate() {
 		return lDate;
 	}
@@ -248,14 +277,6 @@ public class PurchasePV {
 
 	public void setlPaymentType(Label lPaymentType) {
 		this.lPaymentType = lPaymentType;
-	}
-
-	public Label getlStatus() {
-		return lStatus;
-	}
-
-	public void setlStatus(Label lStatus) {
-		this.lStatus = lStatus;
 	}
 
 	public Label getlErr() {
@@ -298,14 +319,6 @@ public class PurchasePV {
 
 	public void setCbBPaymentType(ComboBox<String> cbBPaymentType) {
 		this.cbBPaymentType = cbBPaymentType;
-	}
-
-	public CheckBox getcBStatus() {
-		return cBStatus;
-	}
-
-	public void setcBStatus(CheckBox cBStatus) {
-		this.cBStatus = cBStatus;
 	}
 
 	public Button getBtnCancel() {

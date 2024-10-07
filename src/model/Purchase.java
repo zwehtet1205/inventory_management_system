@@ -2,30 +2,32 @@ package model;
 
 public class Purchase extends Process{
 	
-	private Supplier supplier;
-	private String supplier_name;
-	
-	public Purchase(int id, Item item, int qty, double price,double total, int status,
+
+	public Purchase(int id,int invoice_id,int supplier_id,int warehouse_id, int item_id, int qty, double price,
 			int created_by) {
-		super(id, item, qty, price,total, 2, status, created_by);
+		super(id, invoice_id,supplier_id,warehouse_id,item_id, qty, price, 2, created_by);
+	}
+	
+	public Purchase(int item_id,int qty, double price)
+	{
+		super(item_id,qty,price,2);
 	}
 
-	public Supplier getSupplier() {
-		return supplier;
+	public String getItem_name() {
+		return DBHandler.getItem(getItem_id()).getName();
 	}
 
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
+	public Double getTotal() {
+		return getQty() * getPrice() * 1.0d;
 	}
 
-	public String getSupplier_name() {
-		return supplier_name;
+	public void setItem_name(String item_name) {
 	}
 
-	public void setSupplier_name(String supplier_name) {
-		this.supplier_name = supplier_name;
+	public void setTotal(double total) {
 	}
 	
 	
-
+	
+	
 }

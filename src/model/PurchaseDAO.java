@@ -74,12 +74,12 @@ public class PurchaseDAO extends DBHandler{
 		ArrayList<Purchase> al = new ArrayList<>();
 		try {
 			openConnection();
-			String sql ="SELECT id,item_id,qty,price,total,status FROM processes WHERE type = 2";
+			String sql ="SELECT id,invoice_id,people_id,warehouse_id,item_id,qty,price FROM processes WHERE type = 2";
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{		
-				Purchase p = new Purchase(rs.getInt(1),DBHandler.getItem(rs.getInt(2)),rs.getInt(3),rs.getDouble(4),rs.getDouble(5),rs.getInt(6),1);
+				Purchase p = new Purchase(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getInt(6),rs.getDouble(7),1);
 				al.add(p);
 			}
 			closeConnection();
@@ -122,13 +122,13 @@ public class PurchaseDAO extends DBHandler{
 		Purchase p = null;
 		try {
 			openConnection();
-			String sql = "SELECT id,item_id,qty,price,total,status FROM processes WHERE type = 2 AND id = ?";
+			String sql = "SELECT id,invoice_id,people_id,warehouse_id,item_id,qty,price FROM processes WHERE type = 2 AND id = ?";
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
-				p = new Purchase(rs.getInt(1),DBHandler.getItem(rs.getInt(2)),rs.getInt(3),rs.getDouble(4),rs.getDouble(5),rs.getInt(6),1);
+				p = new Purchase(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getInt(6),rs.getDouble(7),1);
 			}
 			closeConnection();
 		}catch(Exception e) 

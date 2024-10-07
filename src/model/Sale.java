@@ -2,33 +2,10 @@ package model;
 
 public class Sale extends Process{
 	
-	private Customer customer;
-	private String customer_name;
-
-	public Sale(int id,Customer customer, Item item, int qty, double price,double total, int status, int created_by) {
-		super(id, item, qty, price,total, 1, status, created_by);
-		this.customer = customer;
-		this.customer_name = customer.getName();
+	public Sale(int id,int invoice_id,int supplier_id,int warehouse_id, int item_id, int qty, double price, int status,
+			int created_by) {
+		super(id, invoice_id,supplier_id,warehouse_id,item_id, qty, price, 1, created_by);
 	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	public String getCustomer_name() {
-		return customer_name;
-	}
-
-	public void setCustomer_name(String customer_name) {
-		this.customer_name = customer_name;
-	}
-	
-	
-
 	
 
 }

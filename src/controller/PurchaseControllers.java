@@ -5,17 +5,23 @@ import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.DateCell;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 
 import model.*;
 import view.*;
+import view.templates.Voucher;
 
 public class PurchaseControllers{
 	
 	private final PurchasePV view;
 	
-//	private TableViewSelectionModel<Supplier> selectionModel;
+	protected double subtotal = 0 , dis = 0;
+	protected int i;
+
+	
+	private TableViewSelectionModel<Purchase> selectionModel;
 	
 	
 	public PurchaseControllers(PurchasePV view)
@@ -32,9 +38,11 @@ public class PurchaseControllers{
 		setDataToInvoiceInformation();
 		discountPercentHandler();
 		setDataToDiscount();
+		setDataToSubTotal();
 		okBtnHandler();
-//		cancelBtnHandler();
-//		categoryTableHandler();
+		cancelBtnHandler();
+		purchaseTableHandler();
+		saveButtonHandler();
 		
 	}
 	
@@ -44,7 +52,7 @@ public class PurchaseControllers{
 			{
 				super.updateItem(date, empty);
 				LocalDate today = LocalDate.now();
-				setDisable(empty || date.getDayOfMonth() > today.getDayOfMonth() || date.getMonthValue() > today.getMonthValue() || date.getYear() > today.getYear());
+				setDisable(empty ||(date.getYear() >= today.getYear()? (date.getDayOfYear() > today.getDayOfYear() || date.getYear() > today.getYear() ):(date.getYear() > today.getYear())));
 			}
 		});
 		view.getDpPurchaseDate().setValue(LocalDate.now());
@@ -132,6 +140,7 @@ public class PurchaseControllers{
 	public void discountPercentHandler() {
 		view.gettDiscountPercent().setOnKeyReleased(e->{
 			setDataToDiscount();
+			setDataToTotal();
 		});
 	}
 	
@@ -141,14 +150,27 @@ public class PurchaseControllers{
 		if(Validation.isNum(newtext))
 		{
 			double percent = Double.parseDouble(view.gettDiscountPercent().getText());
-			double subtotal = 1000000;
 			
 			if(percent <= 100 && percent >= 0)
 			{
-				double dis = subtotal * (percent / 100.0) * 1.0;
+				dis = subtotal * (percent / 100.0) * 1.0;
 				view.getlDiscountResults().setText(dis+"");
 			}
 		}
+	}
+	
+	public void setDataToSubTotal() {
+		subtotal = 0;
+		view.getTvPurchases().getItems().forEach(purchase->{
+			subtotal += purchase.getQty() * purchase.getPrice();
+		});
+		view.getlSubTotalResults().setText(subtotal+"");
+		setDataToDiscount();
+		setDataToTotal();
+	}
+	
+	public void setDataToTotal() {
+		view.getlTotalResults().setText(subtotal-dis+"");
 	}
 	
 	
@@ -202,20 +224,13 @@ public class PurchaseControllers{
 			else {
 				
 				String code = view.gettCode().getText();
-				String name = view.gettName().getText();
 				Integer qty = Integer.parseInt(view.gettQty().getText());
 				Double price = Double.parseDouble(view.gettPrice().getText());
 				
-				int status;
-				if(view.getcBStatus().isSelected())
-					status = 1;
-				else
-					status = 0;
-				
 				if(DBHandler.existItem(code))
 				{
-					view.getTvPurchases().getItems().add(PurchaseDAO.getPurchase(PurchaseDAO.addPurchase(code, name, qty, price, status)));
-					
+					view.getTvPurchases().getItems().add(new Purchase(DBHandler.getItem(code).getId(),qty,price));
+					setDataToSubTotal();
 				}
 				else {
 					view.getlErr().setText("Item doesn't exist");
@@ -224,80 +239,131 @@ public class PurchaseControllers{
 			}
 		});
 	}
-//	
-//	
-//	
-//	public void categoryTableHandler()
-//	{
-//		selectionModel = view.getTvSupplier().getSelectionModel();
-//		selectionModel.setSelectionMode(SelectionMode.SINGLE);
-//		
-//		view.getTvSupplier().setOnMouseClicked(e->{
-//			updateInfo();
-//		});
-//	}
-//	
-//	public void updateInfo()
-//	{
-//		
-//		
-//		Supplier s = selectionModel.getSelectedItem();
-//		
-//		if(s!= null)
-//		{
-//			String name = s.getName();
-//			String email = s.getContact().getEmail();
-//			String phone = s.getContact().getPhone();
-//			String address = s.getContact().getAddress();
-//			int status = s.getStatus();
-//			
-//			view.gettName().setText(name);
-//			view.gettEmail().setText(email);
-//			view.gettPhone().setText(phone);
-//			view.gettAAddress().setText(address);
-//			if(status==1)
-//				view.getcBStatus().setSelected(true);
-//			else 
-//				view.getcBStatus().setSelected(false);
-//			
-//			view.getBtnFP().getChildren().remove(1);
-//			view.getBtnFP().getChildren().add(view.getBtnUpdate());
-//			
-//			view.getBtnUpdate().setOnAction(e->{
-//				if(view.gettName().getText().equals(""))
-//				{
-//					view.getlErr().setText("Please fill supplier name");
-//					
-//				}
-//				else {
-//					
-//					if(view.gettName().getText()!= name || view.gettEmail().getText() != email ||view.gettPhone().getText() != phone ||view.gettAAddress().getText() != address || ((view.getcBStatus().isSelected() && status != 1 ) || (!view.getcBStatus().isSelected() && status == 1)))
-//					{
-//						
-//						int sts;
-//						if(view.getcBStatus().isSelected())
-//							sts = 1;
-//						else
-//							sts = 0;
-//						DBHandler.updateSupplierDAO(s.getId(), view.gettName().getText(), view.gettEmail().getText(), view.gettPhone().getText(), view.gettAAddress().getText(), sts);
-//						view.getTvSupplier().getItems().remove(s);
-//						view.getTvSupplier().getItems().add(DBHandler.getSupplier(view.gettName().getText()));
-//						
-//					}
-//					cleanText();
-//					
-//					view.getBtnFP().getChildren().remove(1);
-//					view.getBtnFP().getChildren().add(view.getBtnAdd());
-//					view.getlErr().setText("");
-//					
-//				}
-//			});
-//		}
-//		
-//		
-//		
-//	}
-//	
+	
+	
+	
+	public void purchaseTableHandler()
+	{
+		selectionModel = view.getTvPurchases().getSelectionModel();
+		selectionModel.setSelectionMode(SelectionMode.SINGLE);
+		
+		view.getTvPurchases().setOnMouseClicked(e->{
+			updateInfo();
+		});
+	}
+	
+	public void updateInfo()
+	{
+		
+		
+		Purchase p = selectionModel.getSelectedItem();
+		
+		if(p!= null)
+		{
+			String code = DBHandler.getItem(p.getItem_id()).getCode();
+			String name = p.getItem_name();
+			Integer qty = p.getQty();
+			Double price = p.getPrice();
+			
+			view.gettCode().setText(code);
+			view.gettName().setText(name);
+			view.gettQty().setText(qty+"");
+			view.gettPrice().setText(price + "");
+			
+			view.getBtnFP().getChildren().remove(1);
+			view.getBtnFP().getChildren().add(view.getBtnUpdate());
+			
+			view.getBtnUpdate().setOnAction(e->{
+				if(view.gettCode().getText().equals(""))
+				{
+					view.getlErr().setText("Please fill Item Code");
+					
+				}
+				else if(view.gettName().getText().equals(""))
+				{
+					view.getlErr().setText("Please fill Item Name");
+					
+				}
+				else if(view.gettQty().getText().equals(""))
+				{
+					view.getlErr().setText("Please fill Item Qty");
+					
+				}
+				else if(view.gettPrice().getText().equals(""))
+				{
+					view.getlErr().setText("Please fill Item Price");
+					
+				}
+				else if(!Validation.isNum(view.gettQty().getText()))
+				{
+					view.getlErr().setText("Qty must be number");
+				}
+				else if(!Validation.isNum(view.gettPrice().getText()))
+				{
+					view.getlErr().setText("Price must be number");
+				}
+				else {
+					
+					if(view.gettCode().getText().trim() != code || view.gettName().getText()!= name || view.gettQty().getText().trim() != qty+"" || view.gettPrice().getText().trim() != price+"" )
+					{
+						if(DBHandler.existItem(code))
+						{
+							view.getTvPurchases().getItems().remove(p);
+							view.getTvPurchases().getItems().add(new Purchase(DBHandler.getItem(view.gettCode().getText().trim()).getId(),Integer.parseInt(view.gettQty().getText().trim()),Double.parseDouble(view.gettPrice().getText().trim() )));
+							setDataToSubTotal();
+							
+							cleanText();
+							
+							view.getBtnFP().getChildren().remove(1);
+							view.getBtnFP().getChildren().add(view.getBtnAdd());
+						}
+						else {
+							view.getlErr().setText("Item doesn't exist");
+						}
+					}	
+				}
+			});
+		}
+	}
+	
+	public void setDataToVoucher() {
+		Voucher vc = view.getVoucher();
+		Supplier s = DBHandler.getSupplier(view.getCbBSupplier().getValue());
+		vc.getVoucherNo().setText(view.getlInvoiceNoResults().getText());
+		vc.getlVoucherDate().setText(view.getlInvoiceDateResults().getText());
+		vc.getPayment().setText(view.getCbBPaymentType().getValue());
+		vc.getName().setText(s.getName());
+		vc.getPhone().setText(s.getPhone());
+		vc.getAddress().setText(s.getAddress());
+		
+		i = 1;
+		
+		view.getTvPurchases().getItems().forEach(p->{
+			Label item = new Label(p.getItem_name());
+			Label qty = new Label(p.getQty()+"");
+			Label price = new Label(p.getPrice()+"");
+			Label total = new Label(p.getTotal()+"");
+			
+			view.getVoucher().getBodyGP().add(item,0,i);
+			view.getVoucher().getBodyGP().add(qty,1,i);
+			view.getVoucher().getBodyGP().add(price,2,i);
+			view.getVoucher().getBodyGP().add(total,3,i);
+			i++;
+		});
+		
+		vc.getSubtotal().setText(view.getlSubTotalResults().getText());
+		vc.getDiscount().setText(view.getlDiscountResults().getText());
+		vc.getAllTotal().setText(view.getlTotalResults().getText());
+	}
+	
+	public void saveButtonHandler() {
+		
+		view.getBtnSave().setOnAction(e->{
+			setDataToVoucher();
+			view.createVoucher();
+		});
+	}
+	
 	public void cleanText() 
 	{
 
@@ -305,7 +371,6 @@ public class PurchaseControllers{
 		view.gettName().setText("");
 		view.gettQty().setText("");
 		view.gettPrice().setText("");
-		view.getcBStatus().setSelected(true);
 
 	}
 	

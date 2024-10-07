@@ -25,3 +25,11 @@ replay_pid*
 
 #image file
 resources/img/*.*
+
+
+*.idea/*.*
+*.idea/*.*
+*.project
+*.settings/*.*
+
+

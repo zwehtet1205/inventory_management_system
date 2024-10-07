@@ -141,3 +141,28 @@
 .btn-datereload{
 	
 }
+
+.voucher{
+	-fx-min-width: 500px;
+	-fx-max-width: 500px;
+	-fx-padding: 10px 40px;
+}
+
+.voucher-header , .voucher-body  {
+	-fx-border-color: transparent transparent #bbb transparent;
+	-fx-border-style: dashed ;
+	-fx-padding: 20 0;
+}
+
+.voucher-footer{
+	-fx-padding: 10 0 0 0;
+}
+
+.voucher-title{
+	-fx-border-color: transparent transparent #bbb transparent;
+	-fx-font-weight:bold;
+}
+
+.dia{
+	-fx-padding: 10px 40px;
+}
