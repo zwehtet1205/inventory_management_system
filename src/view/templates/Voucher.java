@@ -7,7 +7,8 @@ import javafx.scene.layout.*;
 public class Voucher {
 	private Label lVoucherNo,voucherNo,lVoucherDate,voucherDate,lPayment,payment,lName,name,lPhone,phone,lAddress,address,
 					lItems,lQty,lPrice,lTotal,
-					lSubtotal,subtotal,lDiscount,discount,lAllTotal,allTotal;
+					lSubtotal,subtotal,lDiscount,discount,lAllTotal,allTotal,
+					lWarehouse,warehouse;
 	
 	private GridPane headLeftGP,headRightGP,bodyGP,footerGP;
 	private HBox headHB;
@@ -28,13 +29,13 @@ public class Voucher {
 	
 	public void createNodes() {
 		lVoucherNo = new Label("VOUCHER NO.");
-		voucherNo = new Label("PACBBB");
+		voucherNo = new Label();
 		lVoucherDate = new Label("VOUCHER DATE");
-		voucherDate = new Label("12/2/2024");
+		voucherDate = new Label();
 		lPayment = new Label("PAYMENT TYPE");
-		payment = new Label("Cash");
+		payment = new Label();
 		lName = new Label("NAME");
-		name = new Label("Aung Aung");
+		name = new Label();
 		lPhone = new Label("PHONE NO.");
 		phone = new Label("09987654321");
 		lAddress = new Label("ADDRESS");
@@ -44,11 +45,13 @@ public class Voucher {
 		lPrice = new Label("PRICE");
 		lTotal = new Label("TOTAL");
 		lSubtotal = new Label("SUBTOTAL");
-		subtotal = new Label("542500.00");
+		subtotal = new Label();
 		lDiscount = new Label("DISCOUNT");
-		discount = new Label("4321.00");
+		discount = new Label();
 		lAllTotal = new Label("TOTAL");
-		allTotal = new Label("500000.00");
+		allTotal = new Label();
+		lWarehouse = new Label("From :");
+		warehouse = new Label();
 	}
 	
 	public void createLayouts() {
@@ -89,7 +92,7 @@ public class Voucher {
 		
 		headHB.getChildren().addAll(headLeftGP,spacerHbox,headRightGP);
 		
-		report.setTop(headHB);
+		report.setTop(new VBox(new HBox(5,lWarehouse,warehouse),headHB));
 		
 			
 		
@@ -130,10 +133,21 @@ public class Voucher {
 		headHB.getStyleClass().add("voucher-header");
 		bodyGP.getStyleClass().add("voucher-body");
 		footerFP.getStyleClass().add("voucher-footer");
+		lVoucherNo.getStyleClass().add("voucher-title");
+		lVoucherDate.getStyleClass().add("voucher-title");
+		lPayment.getStyleClass().add("voucher-title");
+		lName.getStyleClass().add("voucher-title");
+		lPhone.getStyleClass().add("voucher-title");
+		lAddress.getStyleClass().add("voucher-title");
 		lItems.getStyleClass().add("voucher-title");
 		lQty.getStyleClass().add("voucher-title");
 		lPrice.getStyleClass().add("voucher-title");
 		lTotal.getStyleClass().add("voucher-title");
+		lSubtotal.getStyleClass().add("voucher-title");
+		lDiscount.getStyleClass().add("voucher-title");
+		lAllTotal.getStyleClass().add("voucher-title");
+		lWarehouse.getStyleClass().add("voucher-note");
+		warehouse.getStyleClass().add("voucher-note");
 	}
 
 	public Label getlVoucherNo() {
@@ -178,6 +192,22 @@ public class Voucher {
 
 	public Label getPayment() {
 		return payment;
+	}
+
+	public Label getlWarehouse() {
+		return lWarehouse;
+	}
+
+	public void setlWarehouse(Label lWarehouse) {
+		this.lWarehouse = lWarehouse;
+	}
+
+	public Label getWarehouse() {
+		return warehouse;
+	}
+
+	public void setWarehouse(Label warehouse) {
+		this.warehouse = warehouse;
 	}
 
 	public void setPayment(Label payment) {

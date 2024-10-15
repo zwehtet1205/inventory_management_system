@@ -6,30 +6,30 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 
 import model.*;
-import model.database.SupplierDAO;
+import model.database.CustomerDAO;
 import view.*;
 
-public class SupplierControllers{
+public class CustomerControllers{
 	
-	private final SupplierPV view;
+	private final CustomerSV view;
 	
-	private TableViewSelectionModel<Supplier> selectionModel;
+	private TableViewSelectionModel<Customer> selectionModel;
 	
 	
-	public SupplierControllers(SupplierPV view)
+	public CustomerControllers(CustomerSV view)
 	{
 		this.view = view;
 		setDataToSupplierTB();
 		okBtnHandler();
 		cancelBtnHandler();
-		categoryTableHandler();
+		customerTableHandler();
 		
 	}
 	
 	
 	public void setDataToSupplierTB() {
-		ArrayList<Supplier> al = SupplierDAO.getAllSupplier();
-		view.getTvSupplier().getItems().addAll(al);
+		ArrayList<Customer> al = CustomerDAO.getAll();
+		view.getTvCustomer().getItems().addAll(al);
 	} 
 	
 	public void cancelBtnHandler()
@@ -53,7 +53,7 @@ public class SupplierControllers{
 		view.getBtnAdd().setOnAction(e->{
 			if(view.gettName().getText().equals(""))
 			{
-				view.getlErr().setText("Please fill Supplier  name");
+				view.getlErr().setText("Please fill Customer name");
 				
 			}
 			else {
@@ -69,13 +69,13 @@ public class SupplierControllers{
 				else
 					status = 0;
 				
-				if(SupplierDAO.existSupplier(name))
+				if(CustomerDAO.exist(name))
 				{
-					view.getlErr().setText("supplier already exist");
+					view.getlErr().setText("Customer already exist");
 				}
 				else {
-					SupplierDAO.addSupplierDAO(name, email, phone, address, status);
-					view.getTvSupplier().getItems().add(SupplierDAO.getSupplier(name));
+					CustomerDAO.add(name, email, phone, address, status);
+					view.getTvCustomer().getItems().add(CustomerDAO.get(name));
 					view.getlErr().setText("");
 				}
 				cleanText();
@@ -85,12 +85,12 @@ public class SupplierControllers{
 	
 	
 	
-	public void categoryTableHandler()
+	public void customerTableHandler()
 	{
-		selectionModel = view.getTvSupplier().getSelectionModel();
+		selectionModel = view.getTvCustomer().getSelectionModel();
 		selectionModel.setSelectionMode(SelectionMode.SINGLE);
 		
-		view.getTvSupplier().setOnMouseClicked(e->{
+		view.getTvCustomer().setOnMouseClicked(e->{
 			updateInfo();
 		});
 	}
@@ -99,15 +99,15 @@ public class SupplierControllers{
 	{
 		
 		
-		Supplier s = selectionModel.getSelectedItem();
+		Customer c = selectionModel.getSelectedItem();
 		
-		if(s!= null)
+		if(c != null)
 		{
-			String name = s.getName();
-			String email = s.getEmail();
-			String phone = s.getPhone();
-			String address = s.getAddress();
-			int status = s.getStatus();
+			String name = c.getName();
+			String email = c.getEmail();
+			String phone = c.getPhone();
+			String address = c.getAddress();
+			int status = c.getStatus();
 			
 			view.gettName().setText(name);
 			view.gettEmail().setText(email);
@@ -124,7 +124,7 @@ public class SupplierControllers{
 			view.getBtnUpdate().setOnAction(e->{
 				if(view.gettName().getText().equals(""))
 				{
-					view.getlErr().setText("Please fill supplier name");
+					view.getlErr().setText("Please fill customer name");
 					
 				}
 				else {
@@ -137,9 +137,9 @@ public class SupplierControllers{
 							sts = 1;
 						else
 							sts = 0;
-						SupplierDAO.updateSupplierDAO(s.getId(), view.gettName().getText(), view.gettEmail().getText(), view.gettPhone().getText(), view.gettAAddress().getText(), sts);
-						view.getTvSupplier().getItems().remove(s);
-						view.getTvSupplier().getItems().add(SupplierDAO.getSupplier(view.gettName().getText()));
+						CustomerDAO.update(c.getId(), view.gettName().getText(), view.gettEmail().getText(), view.gettPhone().getText(), view.gettAAddress().getText(), sts);
+						view.getTvCustomer().getItems().remove(c);
+						view.getTvCustomer().getItems().add(CustomerDAO.get(view.gettName().getText()));
 						
 					}
 					cleanText();
@@ -166,7 +166,7 @@ public class SupplierControllers{
 	}
 	
 
-	public SupplierPV getView() {
+	public CustomerSV getView() {
 		return view;
 	}
 }

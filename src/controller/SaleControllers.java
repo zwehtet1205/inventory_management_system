@@ -16,7 +16,7 @@ import model.database.*;
 import view.*;
 import view.templates.Voucher;
 
-public class PurchaseControllers{
+public class SaleControllers{
 	
 	private PurchasePV view;
 	
@@ -28,7 +28,7 @@ public class PurchaseControllers{
 	private TableViewSelectionModel<Purchase> selectionModel;
 	
 	
-	public PurchaseControllers(PurchasePV view)
+	public SaleControllers(PurchasePV view)
 	{
 		this.view = view;
 		datePickerHandler();

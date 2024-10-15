@@ -11,7 +11,7 @@
 	-fx-padding: 30 0 0 0;
 }
 .topmenu{
-	-fx-background-color: rgba(207,226,243,1);
+	-fx-background-color: #fff;
 	-fx-effect: dropshadow(gaussian,#bbb, 4, 0, 0, 3);
 }
 .brand{
@@ -28,6 +28,7 @@
 	/*-fx-font-weight: bold;*/
 	-fx-font-size: 14;
 	-fx-padding: 0 30;
+	-fx-border-color: transparent transparent #eee transparent;
 }
 .nav-item:hover{
 	-fx-background-color: #f4f4f4;
@@ -159,8 +160,11 @@
 }
 
 .voucher-title{
-	-fx-border-color: transparent transparent #bbb transparent;
-	-fx-font-weight:bold;
+	-fx-font-weight: bold;
+}
+.voucher-note{
+	-fx-font-size: 11px;
+	-fx-text-fill: #bbb;
 }
 
 .dia{

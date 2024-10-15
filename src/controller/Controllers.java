@@ -1,6 +1,6 @@
 package controller;
 
-import model.*;
+import model.database.*;
 
 public class Controllers {
 

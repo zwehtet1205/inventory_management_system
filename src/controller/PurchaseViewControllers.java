@@ -4,7 +4,7 @@ import view.*;
 
 public class PurchaseViewControllers {
 	private final PurchaseView view;
-
+	private PurchaseControllers pc;
 	
 	public PurchaseViewControllers(PurchaseView view)
 	{
@@ -19,14 +19,30 @@ public class PurchaseViewControllers {
 		});
 	}
 	
+	
 	public void purchaseMenuHandler() {
 		view.getlPurchase().setOnMouseClicked(e->{
-			view.getContent().setCenter(new PurchaseControllers(new PurchasePV()).getView().getContent());
+			pc = new PurchaseControllers(new PurchasePV());
+			view.getContent().setCenter(pc.getView().getContent());
+			
+			pc.getView().getBtnSave().setOnAction(event->{
+				pc.setDataToVoucher();
+				pc.getView().createVoucher();
+				pc.voucherHandler();
+				pc = new PurchaseControllers(new PurchasePV());
+				view.getContent().setCenter(pc.getView().getContent());
+			});
+				
+			
 		});
 	}
+	
+	
 
 
 	public PurchaseView getView() {
 		return view;
 	}
+	
+	
 }

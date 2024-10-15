@@ -6,6 +6,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 
 import model.*;
+import model.database.WarehouseDAO;
 import view.*;
 
 public class WarehouseControllers{
@@ -27,7 +28,7 @@ public class WarehouseControllers{
 	
 	
 	public void setDataToWarehouseTB() {
-		ArrayList<Warehouse> al = DBHandler.getAllWarehouse();
+		ArrayList<Warehouse> al = WarehouseDAO.getAllWarehouse();
 		view.getTvWarehouse().getItems().addAll(al);
 	} 
 	
@@ -71,13 +72,13 @@ public class WarehouseControllers{
 				else
 					status = 0;
 				
-				if(DBHandler.existWarehouse(name))
+				if(WarehouseDAO.existWarehouse(name))
 				{
 					view.getlErr().setText("Warehouse already exist");
 				}
 				else {
-					DBHandler.addWarehouseDAO(name,location,status);
-					view.getTvWarehouse().getItems().add(DBHandler.getWarehouse(name));
+					WarehouseDAO.addWarehouseDAO(name,location,status);
+					view.getTvWarehouse().getItems().add(WarehouseDAO.getWarehouse(name));
 					view.getlErr().setText("");
 				}
 				cleanText();
@@ -140,9 +141,9 @@ public class WarehouseControllers{
 							s = 1;
 						else
 							s = 0;
-						DBHandler.updateCategoryDAO(w.getId(), view.gettName().getText(), view.gettALocation().getText(), s);
+						WarehouseDAO.updateWarehouseDAO(w.getId(), view.gettName().getText(), view.gettALocation().getText(), s);
 						view.getTvWarehouse().getItems().remove(w);
-						view.getTvWarehouse().getItems().add(DBHandler.getWarehouse(view.gettName().getText()));
+						view.getTvWarehouse().getItems().add(WarehouseDAO.getWarehouse(view.gettName().getText()));
 						
 					}
 					cleanText();

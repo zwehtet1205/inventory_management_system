@@ -2,15 +2,18 @@ package model;
 
 import java.util.Date;
 
+import model.database.ContactDAO;
+
 public class Supplier extends People{
 	
 	private String email,phone,address;
-
-	public Supplier(int id, String name, Contact contact, int status, String created_by, Date created_at) {
-		super(id, name,"Supplier", contact, status, created_by, created_at);
-		this.email = contact.getEmail();
-		this.phone = contact.getPhone();
-		this.address = contact.getAddress();
+	
+	public Supplier(int id, String name, int contact_id, int status, int created_by, Date created_at) {
+		super(id, name,"Supplier", contact_id, status, created_by, created_at);
+		
+		email = ContactDAO.getContact(getContact_id()).getEmail();
+		phone = ContactDAO.getContact(getContact_id()).getPhone();
+		address = ContactDAO.getContact(getContact_id()).getAddress();
 	}
 
 	public String getEmail() {
@@ -36,6 +39,7 @@ public class Supplier extends People{
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 	
 	
 

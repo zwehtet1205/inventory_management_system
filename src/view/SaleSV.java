@@ -11,8 +11,8 @@ import javafx.scene.layout.*;
 import model.*;
 import view.templates.*;
 
-public class PurchasePV {
-	private Label lDate,lSupplier,lWarehouse,lPaymentType,lErr,
+public class SaleSV {
+	private Label lDate,lCustomer,lWarehouse,lPaymentType,lErr,
 					lItemCode,lItemName,lItemPrice,lQty,
 					lInvoiceNo,lInvoiceNoResults,lInvoiceDate,lInvoiceDateResults,
 					lDiscountPercent,lDiscount,lDiscountResults,lSubTotal,lSubTotalResults,lTotal,lTotalResults;
@@ -25,10 +25,10 @@ public class PurchasePV {
 	
 	private Button btnCancel,btnAdd,btnUpdate,btnSave,btnUnsave,btnDateReload;
 	
-	private TableView<Purchase> tvPurchases;
-	private TableColumn<Purchase,Integer> qtyCol;
-	private TableColumn<Purchase,String> itemNameCol,itemCodeCol;
-	private TableColumn<Purchase,Double> priceCol,totalCol;
+	private TableView<Sale> tvSales;
+	private TableColumn<Sale,Integer> qtyCol;
+	private TableColumn<Sale,String> itemNameCol,itemCodeCol;
+	private TableColumn<Sale,Double> priceCol,totalCol;
 	
 	private Alert alt;
 	private Optional<ButtonType> ans;
@@ -42,7 +42,7 @@ public class PurchasePV {
 	private VBox contentVB;
 
 	
-	public PurchasePV() {
+	public SaleSV() {
 		createNodes();
 		createPurchaseTB();
 		createLayouts();
@@ -57,7 +57,7 @@ public class PurchasePV {
 	public void createNodes() {
 		
 		lDate = new Label("Date");
-		lSupplier = new Label("Supplier Name");
+		lCustomer = new Label("Supplier Name");
 		lWarehouse = new Label("Warehouse Name");
 		lPaymentType = new Label("Payment Type");
 		
@@ -116,7 +116,7 @@ public class PurchasePV {
 		purchaseGP = new GridPane(10,10);
 		purchaseGP.add(lDate, 0, 0);
 		purchaseGP.add(new HBox(5,dpPurchaseDate,btnDateReload), 1, 0);
-		purchaseGP.add(lSupplier, 2, 0);
+		purchaseGP.add(lCustomer, 2, 0);
 		purchaseGP.add(cbBSupplier, 3, 0);
 		purchaseGP.add(lWarehouse, 4, 0);
 		purchaseGP.add(cbBWarehouse, 5, 0);
@@ -168,7 +168,7 @@ public class PurchasePV {
 		
 		voucher = new Voucher();
 		
-		contentVB = new VBox(10,purchaseCard.getCard(),new HBox(10,tvPurchases,addCard.getCard()),totalCard.getCard());
+		contentVB = new VBox(10,purchaseCard.getCard(),new HBox(10,tvSales,addCard.getCard()),totalCard.getCard());
 			
 		
 //		contentVB = new VBox(10,new Voucher().getReport());
@@ -179,7 +179,7 @@ public class PurchasePV {
 	
 	public void setStyles() {
 		
-		tvPurchases.getStyleClass().add("tables");
+		tvSales.getStyleClass().add("tables");
 		
 		lErr.getStyleClass().add("err");
 		
@@ -195,34 +195,34 @@ public class PurchasePV {
 	}
 	
 	public void createPurchaseTB() {
-		tvPurchases = new TableView<Purchase>();
+		tvSales = new TableView<Sale>();
 		
-		itemCodeCol = new TableColumn<Purchase,String>("ITEM CODE");
-		itemCodeCol.setCellValueFactory(new PropertyValueFactory<Purchase,String>("item_code"));
+		itemCodeCol = new TableColumn<Sale,String>("ITEM CODE");
+		itemCodeCol.setCellValueFactory(new PropertyValueFactory<Sale,String>("item_code"));
 		itemCodeCol.setPrefWidth(150);
 		
-		itemNameCol = new TableColumn<Purchase,String>("ITEM NAME");
-		itemNameCol.setCellValueFactory(new PropertyValueFactory<Purchase,String>("item_name"));
+		itemNameCol = new TableColumn<Sale,String>("ITEM NAME");
+		itemNameCol.setCellValueFactory(new PropertyValueFactory<Sale,String>("item_name"));
 		itemNameCol.setPrefWidth(150);
 		
-		qtyCol = new TableColumn<Purchase,Integer>("QTY");
-		qtyCol.setCellValueFactory(new PropertyValueFactory<Purchase,Integer>("qty"));
+		qtyCol = new TableColumn<Sale,Integer>("QTY");
+		qtyCol.setCellValueFactory(new PropertyValueFactory<Sale,Integer>("qty"));
 		qtyCol.setPrefWidth(110);
 		
 		
-		priceCol = new TableColumn<Purchase,Double>("PRICE");
-		priceCol.setCellValueFactory(new PropertyValueFactory<Purchase,Double>("price"));
+		priceCol = new TableColumn<Sale,Double>("PRICE");
+		priceCol.setCellValueFactory(new PropertyValueFactory<Sale,Double>("price"));
 		priceCol.setPrefWidth(110);
 		
-		totalCol = new TableColumn<Purchase,Double>("TOTAL");
-		totalCol.setCellValueFactory(new PropertyValueFactory<Purchase,Double>("total"));
+		totalCol = new TableColumn<Sale,Double>("TOTAL");
+		totalCol.setCellValueFactory(new PropertyValueFactory<Sale,Double>("total"));
 		totalCol.setPrefWidth(110);
 		
-		tvPurchases.getColumns().add(itemCodeCol);
-		tvPurchases.getColumns().add(itemNameCol);
-		tvPurchases.getColumns().add(qtyCol);
-		tvPurchases.getColumns().add(priceCol);
-		tvPurchases.getColumns().add(totalCol);
+		tvSales.getColumns().add(itemCodeCol);
+		tvSales.getColumns().add(itemNameCol);
+		tvSales.getColumns().add(qtyCol);
+		tvSales.getColumns().add(priceCol);
+		tvSales.getColumns().add(totalCol);
 		
 		
 		
@@ -258,11 +258,11 @@ public class PurchasePV {
 	}
 
 	public Label getlSupplier() {
-		return lSupplier;
+		return lCustomer;
 	}
 
 	public void setlSupplier(Label lSupplier) {
-		this.lSupplier = lSupplier;
+		this.lCustomer = lSupplier;
 	}
 
 	public Label getlWarehouse() {
@@ -566,45 +566,7 @@ public class PurchasePV {
 		this.tDiscountPercent = tDiscountPercent;
 	}
 
-	public TableView<Purchase> getTvPurchases() {
-		return tvPurchases;
-	}
-
-	public void setTvPurchases(TableView<Purchase> tvPurchases) {
-		this.tvPurchases = tvPurchases;
-	}
-
-	public TableColumn<Purchase, Integer> getQtyCol() {
-		return qtyCol;
-	}
-
-	public void setQtyCol(TableColumn<Purchase, Integer> qtyCol) {
-		this.qtyCol = qtyCol;
-	}
-
-	public TableColumn<Purchase, String> getItemNameCol() {
-		return itemNameCol;
-	}
-
-	public void setItemNameCol(TableColumn<Purchase, String> itemNameCol) {
-		this.itemNameCol = itemNameCol;
-	}
-
-	public TableColumn<Purchase, Double> getPriceCol() {
-		return priceCol;
-	}
-
-	public void setPriceCol(TableColumn<Purchase, Double> priceCol) {
-		this.priceCol = priceCol;
-	}
-
-	public TableColumn<Purchase, Double> getTotalCol() {
-		return totalCol;
-	}
-
-	public void setTotalCol(TableColumn<Purchase, Double> totalCol) {
-		this.totalCol = totalCol;
-	}
+	
 
 	public ViewCard getTotalCard() {
 		return totalCard;

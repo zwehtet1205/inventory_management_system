@@ -7,6 +7,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 
 import model.*;
+import model.database.*;
 import view.*;
 
 public class AddItemControllers{
@@ -29,7 +30,7 @@ public class AddItemControllers{
 	
 	
 	public void setDataToCategoryTB() {
-		ArrayList<Item> al = DBHandler.getAllItems();
+		ArrayList<Item> al = ItemDAO.getAllItems();
 		view.getTvItems().getItems().addAll(al);
 	} 
 	
@@ -48,7 +49,7 @@ public class AddItemControllers{
 	
 	public void setDatToCategoryComboBox()
 	{
-		ArrayList<String> al = DBHandler.getAllCategoryName();
+		ArrayList<String> al = CategoryDAO.getAllCategoryName();
 		view.getCbBCategory().getItems().addAll(FXCollections.observableArrayList(al));
 		view.getCbBCategory().getSelectionModel().select(0);
 	}
@@ -76,14 +77,14 @@ public class AddItemControllers{
 					status = 0;
 	
 
-				if(DBHandler.existItems(name))
+				if(ItemDAO.existItems(name))
 				{
 					view.getlErr().setText("Category already exist");
 				}
 				else 
 				{
-					DBHandler.addItemsDAO(code,name,category,status);
-					view.getTvItems().getItems().add(DBHandler.getItem(code));
+					ItemDAO.addItemsDAO(code,name,category,status);
+					view.getTvItems().getItems().add(ItemDAO.getItem(code));
 					view.getlErr().setText("");
 				}
 				cleanText();
@@ -142,9 +143,9 @@ public class AddItemControllers{
 							s = 1;
 						else
 							s = 0;
-						DBHandler.updateItemDAO(i.getId(), view.gettCode().getText(),view.gettName().getText(), view.getCbBCategory().getValue(), s);
+						ItemDAO.updateItemDAO(i.getId(), view.gettCode().getText(),view.gettName().getText(), view.getCbBCategory().getValue(), s);
 						view.getTvItems().getItems().remove(i);
-						view.getTvItems().getItems().add(DBHandler.getItem(view.gettName().getText()));
+						view.getTvItems().getItems().add(ItemDAO.getItem(view.gettName().getText()));
 					
 					}
 				

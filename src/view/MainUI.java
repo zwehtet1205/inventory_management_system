@@ -60,14 +60,14 @@ public class MainUI {
 		//End creation label for left menu bar section 
 		
 		// Start adding icons for left menu bar Section 
-		lHome.setGraphic(Icon.get("home",24));
+		lHome.setGraphic(Icon.get("dashboard",24));
 		lInventories.setGraphic(Icon.get("inventory",24));
 		lSuppliers.setGraphic(Icon.get("supplier",24));
 		lCustomers.setGraphic(Icon.get("customer",24));
-		lPurchases.setGraphic(Icon.get("purchases",24));
-		lSales.setGraphic(Icon.get("sales",24));
+		lPurchases.setGraphic(Icon.get("purchase",24));
+		lSales.setGraphic(Icon.get("sale",24));
 		lIncomes.setGraphic(Icon.get("income",24));
-		lExpenses.setGraphic(Icon.get("expenses",24));
+		lExpenses.setGraphic(Icon.get("expense",24));
 		lUsers.setGraphic(Icon.get("user",24));
 		lLogouts.setGraphic(Icon.get("logout",24));
 		lFstPath.setGraphic(Icon.get("home",17));

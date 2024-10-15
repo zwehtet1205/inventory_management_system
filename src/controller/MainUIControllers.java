@@ -13,6 +13,7 @@ public class MainUIControllers {
 		homeHandler();
 		inventoryHandler();
 		purchaseHandler();
+		saleHandler();
 	}
 	
 	public void homeHandler()
@@ -33,6 +34,13 @@ public class MainUIControllers {
 	{
 		view.getlPurchases().setOnMouseClicked(e->{
 			view.getBody().setCenter(new PurchaseViewControllers(new PurchaseView()).getView().getContent());
+		});
+	}
+	
+	public void saleHandler()
+	{
+		view.getlSales().setOnMouseClicked(e->{
+			view.getBody().setCenter(new SaleViewControllers(new SaleView()).getView().getContent());
 		});
 	}
 	

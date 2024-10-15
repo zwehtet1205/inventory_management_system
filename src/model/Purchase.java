@@ -1,5 +1,7 @@
 package model;
 
+import model.database.ItemDAO;
+
 public class Purchase extends Process{
 	
 
@@ -14,11 +16,15 @@ public class Purchase extends Process{
 	}
 
 	public String getItem_name() {
-		return DBHandler.getItem(getItem_id()).getName();
+		return ItemDAO.getItem(getItem_id()).getName();
 	}
 
 	public Double getTotal() {
 		return getQty() * getPrice() * 1.0d;
+	}
+	
+	public String getItem_code() {
+		return ItemDAO.getItem(getItem_id()).getCode();
 	}
 
 	public void setItem_name(String item_name) {

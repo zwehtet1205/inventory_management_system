@@ -6,6 +6,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 
 import model.*;
+import model.database.*;
 import view.*;
 
 public class AddCategoryControllers{
@@ -27,7 +28,7 @@ public class AddCategoryControllers{
 	
 	
 	public void setDataToCategoryTB() {
-		ArrayList<Category> al = DBHandler.getAllCategory();
+		ArrayList<Category> al = CategoryDAO.getAllCategory();
 		view.getTvCategories().getItems().addAll(al);
 	} 
 	
@@ -71,13 +72,13 @@ public class AddCategoryControllers{
 				else
 					status = 0;
 				
-				if(DBHandler.existCategorys(name))
+				if(CategoryDAO.existCategorys(name))
 				{
 					view.getlErr().setText("Category already exist");
 				}
 				else {
-					DBHandler.addCategoryDAO(name,description,status);
-					view.getTvCategories().getItems().add(DBHandler.getCategory(name));
+					CategoryDAO.addCategoryDAO(name,description,status);
+					view.getTvCategories().getItems().add(CategoryDAO.getCategory(name));
 					view.getlErr().setText("");
 				}
 				cleanText();
@@ -140,9 +141,9 @@ public class AddCategoryControllers{
 							s = 1;
 						else
 							s = 0;
-						DBHandler.updateCategoryDAO(c.getId(), view.gettName().getText(), view.gettADescription().getText(), s);
+						CategoryDAO.updateCategoryDAO(c.getId(), view.gettName().getText(), view.gettADescription().getText(), s);
 						view.getTvCategories().getItems().remove(c);
-						view.getTvCategories().getItems().add(DBHandler.getCategory(view.gettName().getText()));
+						view.getTvCategories().getItems().add(CategoryDAO.getCategory(view.gettName().getText()));
 						
 					}
 					cleanText();

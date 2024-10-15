@@ -7,6 +7,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 
 import model.*;
+import model.database.*;
 import view.*;
 
 public class SetPriceControllers{
@@ -29,7 +30,7 @@ public class SetPriceControllers{
 	
 	
 	public void setDataToItemTB() {
-		ArrayList<Item> al = DBHandler.getAllItems();
+		ArrayList<Item> al = ItemDAO.getAllItems();
 		view.getTvItems().getItems().addAll(al);
 	} 
 	
@@ -45,10 +46,10 @@ public class SetPriceControllers{
 	{
 		view.gettCode().setOnKeyReleased(e->{
 			String code = view.gettCode().getText();
-			if(DBHandler.existItem(code))
+			if(ItemDAO.existItem(code))
 			{
-				view.getlNameResult().setText(DBHandler.getItem(code).getName());
-				view.gettPrice().setText(DBHandler.getItem(code).getPrice()+"");
+				view.getlNameResult().setText(ItemDAO.getItem(code).getName());
+				view.gettPrice().setText(ItemDAO.getItem(code).getPrice()+"");
 			}
 			else {
 				view.getlNameResult().setText("");
@@ -68,14 +69,14 @@ public class SetPriceControllers{
 				String code = view.gettCode().getText();
 				try {
 					double price = Double.parseDouble(view.gettPrice().getText());
-					if(!(DBHandler.existItem(code)))
+					if(!(ItemDAO.existItem(code)))
 					{
 						view.getlErr().setText("Item doesn't exist");
 					}
 					else 
 					{
-						DBHandler.updatePrice(code, price);
-						view.getTvItems().getItems().add(DBHandler.getItem(code));
+						ItemDAO.updatePrice(code, price);
+						view.getTvItems().getItems().add(ItemDAO.getItem(code));
 						view.getlErr().setText("");
 					}
 					cleanText();

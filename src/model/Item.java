@@ -2,19 +2,21 @@ package model;
 
 import java.util.Date;
 
+import model.database.CategoryDAO;
+
 public class Item {
 
-	private int id,qty,created_by,status;
-	private String code,name,category;
+	private int id,qty,created_by,status,category_id;
+	private String code,name;
 	private double cost,price;
 	private Date created_at,updated_at;
-	public Item(int id, String code, String name, String category, int qty, double cost, double price,int status, int created_by,
+	public Item(int id, String code, String name, int category_id, int qty, double cost, double price,int status, int created_by,
 			Date created_at, Date updated_at) {
 		super();
 		this.id = id;
 		this.code = code;
 		this.name = name;
-		this.category = category;
+		this.category_id = category_id;
 		this.qty = qty;
 		this.cost = cost;
 		this.price = price;
@@ -29,12 +31,7 @@ public class Item {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category= category;
-	}
+	
 	public int getQty() {
 		return qty;
 	}
@@ -68,12 +65,7 @@ public class Item {
 	public double getPrice() {
 		return price;
 	}
-	@Override
-	public String toString() {
-		return "Item [id=" + id + ", qty=" + qty + ", created_by=" + created_by + ", status=" + status + ", code="
-				+ code + ", name=" + name + ", category=" + category + ", cost=" + cost + ", price=" + price
-				+ ", created_at=" + created_at + ", updated_at=" + updated_at + "]";
-	}
+	
 	public void setPrice(double price) {
 		this.price = price;
 	}
@@ -95,6 +87,15 @@ public class Item {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	public int getCategory_id() {
+		return category_id;
+	}
+	public void setCategory_id(int category_id) {
+		this.category_id = category_id;
+	}
 	
+	public String getCategory() {
+		return CategoryDAO.getCategory(category_id).getName();
+	}
 	
 }
