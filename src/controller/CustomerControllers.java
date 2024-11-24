@@ -53,7 +53,7 @@ public class CustomerControllers{
 		view.getBtnAdd().setOnAction(e->{
 			if(view.gettName().getText().equals(""))
 			{
-				view.getlErr().setText("Please fill Customer name");
+				view.getlErr().setText("Please fill customer name");
 				
 			}
 			else {

@@ -18,17 +18,16 @@ import view.templates.Voucher;
 
 public class SaleControllers{
 	
-	private PurchasePV view;
-	
+	private SaleSV view;
 	
 	protected double subtotal = 0 , dis = 0;
-	protected int i;
-
-	
-	private TableViewSelectionModel<Purchase> selectionModel;
+	protected int i,remainingQty = 0;
 	
 	
-	public SaleControllers(PurchasePV view)
+	private TableViewSelectionModel<Sale> selectionModel;
+	
+	
+	public SaleControllers(SaleSV view)
 	{
 		this.view = view;
 		datePickerHandler();
@@ -38,13 +37,14 @@ public class SaleControllers{
 		setDataToCbBPaymentType();
 		itemCodeInputHandler();
 		itemNameInputHandler();
+		itemQtyInputHandler();
 		setDataToInvoiceInformation();
 		discountPercentHandler();
 		setDataToDiscount();
 		setDataToSubTotal();
 		okBtnHandler();
 		cancelBtnHandler();
-		purchaseTableHandler();
+		saleTableHandler();
 //		saveButtonHandler();	
 	}
 	
@@ -69,21 +69,21 @@ public class SaleControllers{
 	}
 	public void setDataToCbBsupplier()
 	{
-		ArrayList<String> al = PurchaseDAO.getAllSupplierName();
+		ArrayList<String> al = CustomerDAO.getAllName();
 		view.getCbBSupplier().getItems().addAll(FXCollections.observableArrayList(al));
 		view.getCbBSupplier().getSelectionModel().select(0);
 	}
 	
 	public void setDataToCbBWarehouse()
 	{
-		ArrayList<String> al = PurchaseDAO.getAllWarehouseName();
+		ArrayList<String> al = WarehouseDAO.getAllWarehouseName();
 		view.getCbBWarehouse().getItems().addAll(FXCollections.observableArrayList(al));
 		view.getCbBWarehouse().getSelectionModel().select(0);
 	}
 	
 	public void setDataToCbBPaymentType()
 	{
-		ArrayList<String> al = PurchaseDAO.getAllPaymentType();
+		ArrayList<String> al = PaymentDAO.getAllPaymentType();
 		view.getCbBPaymentType().getItems().addAll(FXCollections.observableArrayList(al));
 		view.getCbBPaymentType().getSelectionModel().select(0);
 	}
@@ -97,9 +97,18 @@ public class SaleControllers{
 			{
 				Item i = ItemDAO.getItems(name);
 				view.gettCode().setText(i.getCode());
+				
+				remainingQty = ItemDAO.getRemainingQty(WarehouseDAO.getWarehouse(view.getCbBWarehouse().getValue()).getId(), i.getId());
+				
+				view.getlItemQty().setText(remainingQty+"");
+				view.getlItemPriceResult().setText(i.getPrice()+"");
 			}
 			else{
+				
 				view.gettCode().setText("");
+				remainingQty =  0 ;
+				view.getlItemQty().setText("0");
+				view.getlItemPriceResult().setText("0");
 			}
 		});
 	}
@@ -113,17 +122,58 @@ public class SaleControllers{
 			{
 				Item i = ItemDAO.getItem(code);
 				view.gettName().setText(i.getName());
+				
+				remainingQty = ItemDAO.getRemainingQty(WarehouseDAO.getWarehouse(view.getCbBWarehouse().getValue()).getId(), i.getId());
+				
+				view.getlItemQty().setText(remainingQty+"");
+				view.getlItemPriceResult().setText(i.getPrice()+"");
 			}
 			else{
 				view.gettName().setText("");
+				remainingQty =  0 ;
+				view.getlItemQty().setText("0");
+				view.getlItemPriceResult().setText("0");
 			}
 		});
 	}
 	
+	public void itemQtyInputHandler() {
+		view.gettQty().setOnKeyTyped(e->{
+			int q = 0;
+			
+			String qty = view.gettQty().getText();
+			
+			if(qty.trim() == "") {
+				q = 0;
+				view.getlErr().setText("");
+			}
+			else if(!Validation.isNum(qty))
+			{
+				view.getlErr().setText("Qty must be number");
+			} else {
+				q = Integer.parseInt(qty);
+								
+			}
+			if(remainingQty != 0) {
+				int itemqty = remainingQty;
+				view.getlItemQty().setText((itemqty-q)+"");
+				
+				if(q > itemqty) {
+					view.getlErr().setText("Qty is not enough");
+				} else {
+					view.getlErr().setText("");
+				}
+			} 
+			
+			
+		});
+	}
+	
+	
 
 	public void setDataToInvoiceInformation()
 	{
-		view.getlInvoiceNoResults().setText("PC"+LocalDate.now().getYear()+PurchaseDAO.getNoOfInvoices());
+		view.getlInvoiceNoResults().setText("SA"+LocalDate.now().getYear()+InvoiceDAO.getNoOfSales());
 		setDataToInvoiceDate();
 		view.gettDiscountPercent().setText(0+"");
 		
@@ -159,7 +209,7 @@ public class SaleControllers{
 	
 	public void setDataToSubTotal() {
 		subtotal = 0;
-		view.getTvPurchases().getItems().forEach(purchase->{
+		view.getTvSales().getItems().forEach(purchase->{
 			subtotal += purchase.getQty() * purchase.getPrice();
 		});
 		view.getlSubTotalResults().setText(subtotal+"");
@@ -206,28 +256,16 @@ public class SaleControllers{
 				view.getlErr().setText("Please fill Item Qty");
 				
 			}
-			else if(view.gettPrice().getText().equals(""))
-			{
-				view.getlErr().setText("Please fill Item Price");
-				
-			}
-			else if(!Validation.isNum(view.gettQty().getText()))
-			{
-				view.getlErr().setText("Qty must be number");
-			}
-			else if(!Validation.isNum(view.gettPrice().getText()))
-			{
-				view.getlErr().setText("Price must be number");
-			}
 			else {
 				
 				String code = view.gettCode().getText();
 				Integer qty = Integer.parseInt(view.gettQty().getText());
-				Double price = Double.parseDouble(view.gettPrice().getText());
+				
 				
 				if(ItemDAO.existItem(code))
 				{
-					view.getTvPurchases().getItems().add(new Purchase(ItemDAO.getItem(code).getId(),qty,price));
+					Item i = ItemDAO.getItem(code);
+					view.getTvSales().getItems().add(new Sale(i.getId(),qty));
 					setDataToSubTotal();
 				}
 				else {
@@ -240,12 +278,12 @@ public class SaleControllers{
 	
 	
 	
-	public void purchaseTableHandler()
+	public void saleTableHandler()
 	{
-		selectionModel = view.getTvPurchases().getSelectionModel();
+		selectionModel = view.getTvSales().getSelectionModel();
 		selectionModel.setSelectionMode(SelectionMode.SINGLE);
 		
-		view.getTvPurchases().setOnMouseClicked(e->{
+		view.getTvSales().setOnMouseClicked(e->{
 			updateInfo();
 		});
 	}
@@ -254,19 +292,24 @@ public class SaleControllers{
 	{
 		
 		
-		Purchase p = selectionModel.getSelectedItem();
+		Sale s = selectionModel.getSelectedItem();
 		
-		if(p != null)
+		if(s != null)
 		{
-			String code = ItemDAO.getItem(p.getItem_id()).getCode();
-			String name = p.getItem_name();
-			Integer qty = p.getQty();
-			Double price = p.getPrice();
+			Item i = ItemDAO.getItem(s.getItem_id());
+			String code = i.getCode();
+			String name = s.getItem_name();
+			Integer qty = s.getQty();
+			Double price = s.getPrice();
 			
 			view.gettCode().setText(code);
 			view.gettName().setText(name);
 			view.gettQty().setText(qty+"");
-			view.gettPrice().setText(price + "");
+			
+			remainingQty = ItemDAO.getRemainingQty(WarehouseDAO.getWarehouse(view.getCbBWarehouse().getValue()).getId(), i.getId());
+			view.getlItemQty().setText(remainingQty-qty+"");
+			
+			view.getlItemPriceResult().setText(price + "");
 			
 			view.getBtnFP().getChildren().remove(1);
 			view.getBtnFP().getChildren().add(view.getBtnUpdate());
@@ -287,27 +330,14 @@ public class SaleControllers{
 					view.getlErr().setText("Please fill Item Qty");
 					
 				}
-				else if(view.gettPrice().getText().equals(""))
-				{
-					view.getlErr().setText("Please fill Item Price");
-					
-				}
-				else if(!Validation.isNum(view.gettQty().getText()))
-				{
-					view.getlErr().setText("Qty must be number");
-				}
-				else if(!Validation.isNum(view.gettPrice().getText()))
-				{
-					view.getlErr().setText("Price must be number");
-				}
 				else {
 					
-					if(view.gettCode().getText().trim() != code || view.gettName().getText()!= name || view.gettQty().getText().trim() != qty+"" || view.gettPrice().getText().trim() != price+"" )
+					if(view.gettCode().getText().trim() != code || view.gettName().getText()!= name || view.gettQty().getText().trim() != qty+""  )
 					{
 						if(ItemDAO.existItem(code))
 						{
-							view.getTvPurchases().getItems().remove(p);
-							view.getTvPurchases().getItems().add(new Purchase(ItemDAO.getItem(view.gettCode().getText().trim()).getId(),Integer.parseInt(view.gettQty().getText().trim()),Double.parseDouble(view.gettPrice().getText().trim() )));
+							view.getTvSales().getItems().remove(s);
+							view.getTvSales().getItems().add(new Sale(ItemDAO.getItem(view.gettCode().getText().trim()).getId(),Integer.parseInt(view.gettQty().getText().trim())));
 							setDataToSubTotal();
 							
 							cleanText();
@@ -327,17 +357,17 @@ public class SaleControllers{
 	public void setDataToVoucher() {
 		Voucher vc = view.getVoucher();
 		
-		Supplier s = SupplierDAO.getSupplier(view.getCbBSupplier().getValue());
+		Customer c = CustomerDAO.get(view.getCbBSupplier().getValue());
 		vc.getVoucherNo().setText(view.getlInvoiceNoResults().getText());
 		vc.getVoucherDate().setText(view.getlInvoiceDateResults().getText());
 		vc.getPayment().setText(view.getCbBPaymentType().getValue());
-		vc.getName().setText(s.getName());
-		vc.getPhone().setText(s.getPhone());
-		vc.getAddress().setText(s.getAddress());
+		vc.getName().setText(c.getName());
+		vc.getPhone().setText(c.getPhone());
+		vc.getAddress().setText(c.getAddress());
 		
 		i = 1;
 		
-		view.getTvPurchases().getItems().forEach(p->{
+		view.getTvSales().getItems().forEach(p->{
 
 			Label item = new Label(p.getItem_name());
 			Label qty = new Label(p.getQty()+"");
@@ -360,21 +390,22 @@ public class SaleControllers{
 	
 	
 	
-//	public void saveButtonHandler() {
-//		
-//		view.getBtnSave().setOnAction(e->{
-//			setDataToVoucher();
-//			view.createVoucher();
-//			voucherHandler();
-//		});
-//	}
+	public SaleControllers saveButtonHandler() {
+		setDataToVoucher();
+		view.createVoucher();
+		voucherHandler();
+		return new SaleControllers(new SaleSV());
+		
+	}
 	
 	public void cleanText() 
 	{
 		view.gettCode().setText("");
 		view.gettName().setText("");
 		view.gettQty().setText("");
-		view.gettPrice().setText("");
+		remainingQty = 0;
+		view.getlItemQty().setText("0");
+		view.getlItemPriceResult().setText("0");
 	}
 	
 	
@@ -383,22 +414,21 @@ public class SaleControllers{
 		if(view.getAns().isPresent() && view.getAns().get()==ButtonType.OK)
 		{
 			String invoiceNumber = view.getlInvoiceNoResults().getText();			
-			LocalDate invoiceDate = view.getDpPurchaseDate().getValue();
+			Date invoiceDate = Date.valueOf(view.getDpPurchaseDate().getValue());
 			String payment = view.getCbBPaymentType().getValue();
 			double discount = Double.parseDouble(view.getlDiscountResults().getText());
 			String people = view.getCbBSupplier().getValue();
 			String warehouse = view.getCbBWarehouse().getValue();
 			int created_by = 1;
 			
-			int invoice_id = PurchaseDAO.addVoucher(invoiceNumber, Date.valueOf(invoiceDate), payment, discount, created_by);
+			int invoice_id = InvoiceDAO.addVoucher(invoiceNumber,invoiceDate,1, payment, discount, created_by);
 			
-			view.getTvPurchases().getItems().forEach(p->{
-				String code = p.getItem_code();
-				String name = p.getItem_name();
-				int qty = p.getQty();
-				double price = p.getPrice();
+			view.getTvSales().getItems().forEach(s->{
+				String code = s.getItem_code();
+				String name = s.getItem_name();
+				int qty = s.getQty();
 				
-				PurchaseDAO.addPurchase(invoice_id, people, warehouse, code, name, qty, price, created_by);
+				SaleDAO.add(invoice_id, people, warehouse, code, name, qty, created_by);
 				
 			});
 			
@@ -408,12 +438,12 @@ public class SaleControllers{
 		
 	}
 	
-	public void reset() {
-		view = new PurchasePV();
-	}
+//	public void reset() {
+//		view = new PurchasePV();
+//	}
 	
 
-	public PurchasePV getView() {
+	public SaleSV getView() {
 		return view;
 	}
 	

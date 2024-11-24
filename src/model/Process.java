@@ -23,6 +23,13 @@ public class Process {
 		this.price = price;
 		this.type = type;
 	}
+	
+	public Process(int item_id,int qty,int type) {
+		this.item_id = item_id;
+		this.qty = qty;
+		this.type = type;
+	}
+	
 	public int getId() {
 		return id;
 	}

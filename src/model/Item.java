@@ -6,19 +6,17 @@ import model.database.CategoryDAO;
 
 public class Item {
 
-	private int id,qty,created_by,status,category_id;
+	private int id,created_by,status,category_id;
 	private String code,name;
-	private double cost,price;
+	private double price;
 	private Date created_at,updated_at;
-	public Item(int id, String code, String name, int category_id, int qty, double cost, double price,int status, int created_by,
+	public Item(int id, String code, String name, int category_id, double price,int status, int created_by,
 			Date created_at, Date updated_at) {
 		super();
 		this.id = id;
 		this.code = code;
 		this.name = name;
 		this.category_id = category_id;
-		this.qty = qty;
-		this.cost = cost;
 		this.price = price;
 		this.status = status;
 		this.created_by = created_by;
@@ -32,12 +30,7 @@ public class Item {
 		this.id = id;
 	}
 	
-	public int getQty() {
-		return qty;
-	}
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
+	
 	public int getCreated_by() {
 		return created_by;
 	}
@@ -55,12 +48,6 @@ public class Item {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public double getCost() {
-		return cost;
-	}
-	public void setCost(double cost) {
-		this.cost = cost;
 	}
 	public double getPrice() {
 		return price;

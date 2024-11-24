@@ -6,7 +6,7 @@ import javafx.scene.layout.*;
 
 public class  PurchaseView {
 	
-	private Label lSupplier,lPurchase;
+	private Label lSupplier,lPurchase,lTransitions;
 		
 	private HBox menuHB;
 	private BorderPane purchaseBP;
@@ -26,11 +26,12 @@ public class  PurchaseView {
 		
 		lSupplier = new Label("Suppliers");
 		lPurchase = new Label("Purchase");
+		lTransitions = new Label("Transitions");
 		
 	}
 	
 	public void createLayouts() {
-		menuHB = new HBox(lSupplier,lPurchase);
+		menuHB = new HBox(lSupplier,lPurchase,lTransitions);
 		
 		purchaseBP = new BorderPane();
 		purchaseBP.setTop(menuHB);
@@ -44,14 +45,12 @@ public class  PurchaseView {
 		menuHB.getStyleClass().add("menu");
 		lSupplier.getStyleClass().add("menu-item");
 		lPurchase.getStyleClass().add("menu-item");
-		
+		lTransitions.getStyleClass().add("menu-item");
 
 		
 		purchaseBP.getStyleClass().add("dashboard");
 	}
 
-
-	
 
 
 	public Label getlSupplier() {
@@ -71,6 +70,27 @@ public class  PurchaseView {
 
 	public void setlPurchase(Label lPurchase) {
 		this.lPurchase = lPurchase;
+	}
+
+	
+
+	public Label getlTransitions() {
+		return lTransitions;
+	}
+
+
+	public void setlTransitions(Label lTransitions) {
+		this.lTransitions = lTransitions;
+	}
+
+
+	public BorderPane getPurchaseBP() {
+		return purchaseBP;
+	}
+
+
+	public void setPurchaseBP(BorderPane purchaseBP) {
+		this.purchaseBP = purchaseBP;
 	}
 
 

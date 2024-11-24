@@ -13,14 +13,14 @@ import view.templates.*;
 
 public class SaleSV {
 	private Label lDate,lCustomer,lWarehouse,lPaymentType,lErr,
-					lItemCode,lItemName,lItemPrice,lQty,
+					lItemCode,lItemName,lItemQty,lItemPrice,lItemPriceResult,lQty,
 					lInvoiceNo,lInvoiceNoResults,lInvoiceDate,lInvoiceDateResults,
 					lDiscountPercent,lDiscount,lDiscountResults,lSubTotal,lSubTotalResults,lTotal,lTotalResults;
 	
 	private DatePicker dpPurchaseDate;
-	private ComboBox<String> cbBSupplier,cbBWarehouse,cbBPaymentType;
+	private ComboBox<String> cbBCusomter,cbBWarehouse,cbBPaymentType;
 	
-	private TextField tCode,tName,tPrice,tQty,tDiscountPercent;
+	private TextField tCode,tName,tQty,tDiscountPercent;
 	
 	
 	private Button btnCancel,btnAdd,btnUpdate,btnSave,btnUnsave,btnDateReload;
@@ -57,13 +57,15 @@ public class SaleSV {
 	public void createNodes() {
 		
 		lDate = new Label("Date");
-		lCustomer = new Label("Supplier Name");
+		lCustomer = new Label("Customer Name");
 		lWarehouse = new Label("Warehouse Name");
 		lPaymentType = new Label("Payment Type");
 		
 		lItemCode = new Label("Item Code");
 		lItemName = new Label("Item Name");
+		lItemQty = new Label("0");
 		lItemPrice = new Label("Price");
+		lItemPriceResult = new Label("0");
 		lQty = new Label("Qty");
 		
 		lInvoiceNo = new Label("INVOICE NO. -");
@@ -85,13 +87,12 @@ public class SaleSV {
 		
 		dpPurchaseDate = new DatePicker();
 		
-		cbBSupplier = new ComboBox<>();
+		cbBCusomter = new ComboBox<>();
 		cbBWarehouse = new ComboBox<>();
 		cbBPaymentType = new ComboBox<>();
 		
 		tCode = new TextField();
 		tName = new TextField();
-		tPrice = new TextField();
 		tQty = new TextField();
 		
 		tDiscountPercent = new TextField();		
@@ -117,7 +118,7 @@ public class SaleSV {
 		purchaseGP.add(lDate, 0, 0);
 		purchaseGP.add(new HBox(5,dpPurchaseDate,btnDateReload), 1, 0);
 		purchaseGP.add(lCustomer, 2, 0);
-		purchaseGP.add(cbBSupplier, 3, 0);
+		purchaseGP.add(cbBCusomter, 3, 0);
 		purchaseGP.add(lWarehouse, 4, 0);
 		purchaseGP.add(cbBWarehouse, 5, 0);
 		purchaseGP.add(lPaymentType, 6, 0);
@@ -132,14 +133,14 @@ public class SaleSV {
 		addGP.add(lItemName, 0, 1);
 		addGP.add(tName, 1, 1);
 		addGP.add(lQty, 0, 2);
-		addGP.add(tQty, 1, 2);
+		addGP.add(new HBox(10,tQty,new Label("Remaining - "),lItemQty), 1, 2);
 		addGP.add(lItemPrice, 0, 3);
-		addGP.add(tPrice, 1, 3);
+		addGP.add(lItemPriceResult, 1, 3);
 		addGP.add(btnFP, 0, 4);
 		
 		GridPane.setColumnSpan(btnFP, 2);
 		
-		addCard = new ViewCard(new Label("Purchase"));
+		addCard = new ViewCard(new Label("Sale"));
 		addCard.add(addGP);
 		addCard.add(lErr);
 		
@@ -228,7 +229,6 @@ public class SaleSV {
 		
 	}
 	
-	
 	public void createVoucher() {
 		alt = new Alert(AlertType.CONFIRMATION);
 		alt.setHeaderText("");
@@ -240,14 +240,6 @@ public class SaleSV {
 		alt.getDialogPane().setMaxWidth(200);
 		ans = alt.showAndWait();
 	}
-	
-	public Voucher getVoucher() {
-		return voucher;
-	}
-
-	public void setVoucher(Voucher voucher) {
-		this.voucher = voucher;
-	}
 
 	public Label getlDate() {
 		return lDate;
@@ -257,12 +249,12 @@ public class SaleSV {
 		this.lDate = lDate;
 	}
 
-	public Label getlSupplier() {
+	public Label getlCustomer() {
 		return lCustomer;
 	}
 
-	public void setlSupplier(Label lSupplier) {
-		this.lCustomer = lSupplier;
+	public void setlCustomer(Label lCustomer) {
+		this.lCustomer = lCustomer;
 	}
 
 	public Label getlWarehouse() {
@@ -287,123 +279,6 @@ public class SaleSV {
 
 	public void setlErr(Label lErr) {
 		this.lErr = lErr;
-	}
-
-	public DatePicker getDpPurchaseDate() {
-		return dpPurchaseDate;
-	}
-
-	public void setDpPurchaseDate(DatePicker dpPurchaseDate) {
-		this.dpPurchaseDate = dpPurchaseDate;
-	}
-
-	
-
-	public ComboBox<String> getCbBSupplier() {
-		return cbBSupplier;
-	}
-
-	public void setCbBSupplier(ComboBox<String> cbBSupplier) {
-		this.cbBSupplier = cbBSupplier;
-	}
-
-	public ComboBox<String> getCbBWarehouse() {
-		return cbBWarehouse;
-	}
-
-	public void setCbBWarehouse(ComboBox<String> cbBWarehouse) {
-		this.cbBWarehouse = cbBWarehouse;
-	}
-
-	public ComboBox<String> getCbBPaymentType() {
-		return cbBPaymentType;
-	}
-
-	public void setCbBPaymentType(ComboBox<String> cbBPaymentType) {
-		this.cbBPaymentType = cbBPaymentType;
-	}
-
-	public Button getBtnCancel() {
-		return btnCancel;
-	}
-
-	public void setBtnCancel(Button btnCancel) {
-		this.btnCancel = btnCancel;
-	}
-
-	public Button getBtnAdd() {
-		return btnAdd;
-	}
-
-	public void setBtnAdd(Button btnAdd) {
-		this.btnAdd = btnAdd;
-	}
-
-	public Button getBtnUpdate() {
-		return btnUpdate;
-	}
-
-	public void setBtnUpdate(Button btnUpdate) {
-		this.btnUpdate = btnUpdate;
-	}
-
-	
-	
-
-	public Button getBtnSave() {
-		return btnSave;
-	}
-
-	public void setBtnSave(Button btnSave) {
-		this.btnSave = btnSave;
-	}
-
-	public Button getBtnDateReload() {
-		return btnDateReload;
-	}
-
-	public void setBtnDateReload(Button btnDateReload) {
-		this.btnDateReload = btnDateReload;
-	}
-
-	public ViewCard getPurchaseCard() {
-		return purchaseCard;
-	}
-
-	public void setPurchaseCard(ViewCard purchaseCard) {
-		this.purchaseCard = purchaseCard;
-	}
-
-	public ViewCard getAddCard() {
-		return addCard;
-	}
-
-	public void setAddCard(ViewCard addCard) {
-		this.addCard = addCard;
-	}
-
-	public GridPane getPurchaseGP() {
-		return purchaseGP;
-	}
-
-	public void setPurchaseGP(GridPane purchaseGP) {
-		this.purchaseGP = purchaseGP;
-	}
-
-	public GridPane getAddGP() {
-		return addGP;
-	}
-
-	public void setAddGP(GridPane addGP) {
-		this.addGP = addGP;
-	}
-
-	public FlowPane getBtnFP() {
-		return btnFP;
-	}
-
-	public void setBtnFP(FlowPane btnFP) {
-		this.btnFP = btnFP;
 	}
 
 	public Label getlItemCode() {
@@ -526,6 +401,38 @@ public class SaleSV {
 		this.lTotalResults = lTotalResults;
 	}
 
+	public DatePicker getDpPurchaseDate() {
+		return dpPurchaseDate;
+	}
+
+	public void setDpPurchaseDate(DatePicker dpPurchaseDate) {
+		this.dpPurchaseDate = dpPurchaseDate;
+	}
+
+	public ComboBox<String> getCbBSupplier() {
+		return cbBCusomter;
+	}
+
+	public void setCbBSupplier(ComboBox<String> cbBSupplier) {
+		this.cbBCusomter = cbBSupplier;
+	}
+
+	public ComboBox<String> getCbBWarehouse() {
+		return cbBWarehouse;
+	}
+
+	public void setCbBWarehouse(ComboBox<String> cbBWarehouse) {
+		this.cbBWarehouse = cbBWarehouse;
+	}
+
+	public ComboBox<String> getCbBPaymentType() {
+		return cbBPaymentType;
+	}
+
+	public void setCbBPaymentType(ComboBox<String> cbBPaymentType) {
+		this.cbBPaymentType = cbBPaymentType;
+	}
+
 	public TextField gettCode() {
 		return tCode;
 	}
@@ -540,14 +447,6 @@ public class SaleSV {
 
 	public void settName(TextField tName) {
 		this.tName = tName;
-	}
-
-	public TextField gettPrice() {
-		return tPrice;
-	}
-
-	public void settPrice(TextField tPrice) {
-		this.tPrice = tPrice;
 	}
 
 	public TextField gettQty() {
@@ -566,38 +465,36 @@ public class SaleSV {
 		this.tDiscountPercent = tDiscountPercent;
 	}
 
-	
-
-	public ViewCard getTotalCard() {
-		return totalCard;
+	public Button getBtnCancel() {
+		return btnCancel;
 	}
 
-	public void setTotalCard(ViewCard totalCard) {
-		this.totalCard = totalCard;
+	public void setBtnCancel(Button btnCancel) {
+		this.btnCancel = btnCancel;
 	}
 
-	public GridPane getTotalGP() {
-		return totalGP;
+	public Button getBtnAdd() {
+		return btnAdd;
 	}
 
-	public void setTotalGP(GridPane totalGP) {
-		this.totalGP = totalGP;
+	public void setBtnAdd(Button btnAdd) {
+		this.btnAdd = btnAdd;
 	}
 
-	public HBox getTotalHB() {
-		return totalHB;
+	public Button getBtnUpdate() {
+		return btnUpdate;
 	}
 
-	public void setTotalHB(HBox totalHB) {
-		this.totalHB = totalHB;
+	public void setBtnUpdate(Button btnUpdate) {
+		this.btnUpdate = btnUpdate;
 	}
 
-	public VBox getContentVB() {
-		return contentVB;
+	public Button getBtnSave() {
+		return btnSave;
 	}
 
-	public void setContentVB(VBox contentVB) {
-		this.contentVB = contentVB;
+	public void setBtnSave(Button btnSave) {
+		this.btnSave = btnSave;
 	}
 
 	public Button getBtnUnsave() {
@@ -606,6 +503,62 @@ public class SaleSV {
 
 	public void setBtnUnsave(Button btnUnsave) {
 		this.btnUnsave = btnUnsave;
+	}
+
+	public Button getBtnDateReload() {
+		return btnDateReload;
+	}
+
+	public void setBtnDateReload(Button btnDateReload) {
+		this.btnDateReload = btnDateReload;
+	}
+
+	public TableView<Sale> getTvSales() {
+		return tvSales;
+	}
+
+	public void setTvSales(TableView<Sale> tvSales) {
+		this.tvSales = tvSales;
+	}
+
+	public TableColumn<Sale, Integer> getQtyCol() {
+		return qtyCol;
+	}
+
+	public void setQtyCol(TableColumn<Sale, Integer> qtyCol) {
+		this.qtyCol = qtyCol;
+	}
+
+	public TableColumn<Sale, String> getItemNameCol() {
+		return itemNameCol;
+	}
+
+	public void setItemNameCol(TableColumn<Sale, String> itemNameCol) {
+		this.itemNameCol = itemNameCol;
+	}
+
+	public TableColumn<Sale, String> getItemCodeCol() {
+		return itemCodeCol;
+	}
+
+	public void setItemCodeCol(TableColumn<Sale, String> itemCodeCol) {
+		this.itemCodeCol = itemCodeCol;
+	}
+
+	public TableColumn<Sale, Double> getPriceCol() {
+		return priceCol;
+	}
+
+	public void setPriceCol(TableColumn<Sale, Double> priceCol) {
+		this.priceCol = priceCol;
+	}
+
+	public TableColumn<Sale, Double> getTotalCol() {
+		return totalCol;
+	}
+
+	public void setTotalCol(TableColumn<Sale, Double> totalCol) {
+		this.totalCol = totalCol;
 	}
 
 	public Alert getAlt() {
@@ -624,6 +577,105 @@ public class SaleSV {
 		this.ans = ans;
 	}
 
+	public ViewCard getPurchaseCard() {
+		return purchaseCard;
+	}
+
+	public void setPurchaseCard(ViewCard purchaseCard) {
+		this.purchaseCard = purchaseCard;
+	}
+
+	public ViewCard getAddCard() {
+		return addCard;
+	}
+
+	public void setAddCard(ViewCard addCard) {
+		this.addCard = addCard;
+	}
+
+	public ViewCard getTotalCard() {
+		return totalCard;
+	}
+
+	public void setTotalCard(ViewCard totalCard) {
+		this.totalCard = totalCard;
+	}
+
+	public Voucher getVoucher() {
+		return voucher;
+	}
+
+	public void setVoucher(Voucher voucher) {
+		this.voucher = voucher;
+	}
+
+	public GridPane getPurchaseGP() {
+		return purchaseGP;
+	}
+
+	public void setPurchaseGP(GridPane purchaseGP) {
+		this.purchaseGP = purchaseGP;
+	}
+
+	public GridPane getAddGP() {
+		return addGP;
+	}
+
+	public void setAddGP(GridPane addGP) {
+		this.addGP = addGP;
+	}
+
+	public GridPane getTotalGP() {
+		return totalGP;
+	}
+
+	public void setTotalGP(GridPane totalGP) {
+		this.totalGP = totalGP;
+	}
+
+	public FlowPane getBtnFP() {
+		return btnFP;
+	}
+
+	public void setBtnFP(FlowPane btnFP) {
+		this.btnFP = btnFP;
+	}
+
+	public HBox getTotalHB() {
+		return totalHB;
+	}
+
+	public void setTotalHB(HBox totalHB) {
+		this.totalHB = totalHB;
+	}
+	
+	
+
+	public Label getlItemQty() {
+		return lItemQty;
+	}
+
+	public void setlItemQty(Label lItemQty) {
+		this.lItemQty = lItemQty;
+	}
+
+	public Label getlItemPriceResult() {
+		return lItemPriceResult;
+	}
+
+	public void setlItemPriceResult(Label lItemPriceResult) {
+		this.lItemPriceResult = lItemPriceResult;
+	}
+
+	public VBox getContentVB() {
+		return contentVB;
+	}
+
+	public void setContentVB(VBox contentVB) {
+		this.contentVB = contentVB;
+	}
+	
+	
 	
 
 	

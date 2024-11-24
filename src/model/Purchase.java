@@ -27,11 +27,6 @@ public class Purchase extends Process{
 		return ItemDAO.getItem(getItem_id()).getCode();
 	}
 
-	public void setItem_name(String item_name) {
-	}
-
-	public void setTotal(double total) {
-	}
 	
 	
 	

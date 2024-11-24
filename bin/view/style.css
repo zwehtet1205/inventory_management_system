@@ -3,7 +3,7 @@
 	-fx-padding: 0 3;
 }
 .leftbar{
-	-fx-background-color: #fff;
+	-fx-background-color: #ecf0f1 ;
 	-fx-border-radius: 20;
 	-fx-effect: dropshadow(gaussian,#bbb, 4, 0, 3, 0);
 }
@@ -11,7 +11,7 @@
 	-fx-padding: 30 0 0 0;
 }
 .topmenu{
-	-fx-background-color: #fff;
+	-fx-background-color: #f0f0f0;
 	-fx-effect: dropshadow(gaussian,#bbb, 4, 0, 0, 3);
 }
 .brand{
@@ -31,7 +31,7 @@
 	-fx-border-color: transparent transparent #eee transparent;
 }
 .nav-item:hover{
-	-fx-background-color: #f4f4f4;
+	-fx-background-color: #f39c12;
 }
 .nav-logout{
 	/*-fx-border-color: #000 transparent transparent transparent;*/
@@ -43,17 +43,18 @@
 	-fx-padding: 5 ;
 }
 .menu{
-	-fx-background-color: #fff;
+	-fx-background-color: #f0f0f0;
 	-fx-effect: dropshadow(gaussian,#bbb, 4, 0, 3, 3);
 	-fx-padding: 0 0;
 }
 
 .menu-item{
+	-fx-text-fill: #333333;
 	-fx-border-color: transparent #ddd transparent transparent ;
 	-fx-padding: 10 34;
 }
 .menu-item:hover,.menu-item.active{
-	-fx-background-color:#f4f4f4;
+	-fx-background-color:#f39c12;
 }
 
 .main-view{
@@ -63,7 +64,7 @@
 .card,.chart-card{
 	-fx-background-color: #fff;
 	-fx-border-width: 4px;
-	-fx-border-color:transparent transparent transparent skyblue;
+	-fx-border-color:transparent transparent transparent #3498db;
 	-fx-effect: dropshadow(gaussian,#bbb, 4, 0, 3, 3);
 	-fx-padding: 10;
 }
@@ -72,7 +73,7 @@
 }
 
 .report-title,.card-title{
-	-fx-text-fill: steelblue;
+	-fx-text-fill: #3498db;
 	-fx-font-size: 15px;
 	-fx-font-weight: bold;
 	-fx-padding: 5 0;
@@ -117,7 +118,7 @@
 	-fx-min-width: 645;
 	-fx-max-width: 645;
 	-fx-border-width: 4px;
-	-fx-border-color:transparent transparent transparent skyblue;
+	-fx-border-color:transparent transparent transparent #3498db;
 	-fx-background-color: #fff;
 	
 	-fx-effect: dropshadow(gaussian,#bbb, 4, 0, 3, 3);
@@ -125,15 +126,16 @@
 
 .btn-cancel,.btn-add,.btn-update,.btn-set{
 	-fx-padding: 5 20;
+	-fx-effect: dropshadow(gaussian,#bbb, 2, 0, 2, 2);
 }
 .btn-cancel{
-
-	-fx-background-color: #ddd;
+	-fx-text-fill: #fff;
+	-fx-background-color: #e74c3c;
 }
 
 .btn-add,.btn-update,.btn-set{
 	-fx-text-fill: #fff;
-	-fx-background-color: steelblue;
+	-fx-background-color:  #2ecc71;
 }
 .err{
 	-fx-text-fill: red;

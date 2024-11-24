@@ -69,21 +69,21 @@ public class PurchaseControllers{
 	}
 	public void setDataToCbBsupplier()
 	{
-		ArrayList<String> al = PurchaseDAO.getAllSupplierName();
+		ArrayList<String> al = SupplierDAO.getAllSupplierName();
 		view.getCbBSupplier().getItems().addAll(FXCollections.observableArrayList(al));
 		view.getCbBSupplier().getSelectionModel().select(0);
 	}
 	
 	public void setDataToCbBWarehouse()
 	{
-		ArrayList<String> al = PurchaseDAO.getAllWarehouseName();
+		ArrayList<String> al = WarehouseDAO.getAllWarehouseName();
 		view.getCbBWarehouse().getItems().addAll(FXCollections.observableArrayList(al));
 		view.getCbBWarehouse().getSelectionModel().select(0);
 	}
 	
 	public void setDataToCbBPaymentType()
 	{
-		ArrayList<String> al = PurchaseDAO.getAllPaymentType();
+		ArrayList<String> al = PaymentDAO.getAllPaymentType();
 		view.getCbBPaymentType().getItems().addAll(FXCollections.observableArrayList(al));
 		view.getCbBPaymentType().getSelectionModel().select(0);
 	}
@@ -123,7 +123,7 @@ public class PurchaseControllers{
 
 	public void setDataToInvoiceInformation()
 	{
-		view.getlInvoiceNoResults().setText("PC"+LocalDate.now().getYear()+PurchaseDAO.getNoOfInvoices());
+		view.getlInvoiceNoResults().setText("PC"+LocalDate.now().getYear()+InvoiceDAO.getNoOfPurchases());
 		setDataToInvoiceDate();
 		view.gettDiscountPercent().setText(0+"");
 		
@@ -390,7 +390,7 @@ public class PurchaseControllers{
 			String warehouse = view.getCbBWarehouse().getValue();
 			int created_by = 1;
 			
-			int invoice_id = PurchaseDAO.addVoucher(invoiceNumber, Date.valueOf(invoiceDate), payment, discount, created_by);
+			int invoice_id = InvoiceDAO.addVoucher(invoiceNumber, Date.valueOf(invoiceDate),2, payment, discount, created_by);
 			
 			view.getTvPurchases().getItems().forEach(p->{
 				String code = p.getItem_code();

@@ -16,6 +16,7 @@ public class InventoryControllers{
 		addItemAndUpdateVB = new AddNewItemAndUpdateControllers(new AddNewItemAndUpdateIV()).getView().getContent();
 		addItemAndUpdateHandler();
 		warehouseHandler();
+		stockListHandler();
 	}
 
 	public void addItemAndUpdateHandler()
@@ -29,6 +30,13 @@ public class InventoryControllers{
 	{
 		view.getlWarehouseMenu().setOnMouseClicked(e->{
 			view.getContent().setCenter(new WarehouseControllers(new WarehouseIV()).getView().getContent());
+		});
+	}
+	
+	public void stockListHandler()
+	{
+		view.getlStockListMenu().setOnMouseClicked(e->{
+			view.getContent().setCenter(new StockListControllers(new StockListsIV()).getContent());
 		});
 	}
 

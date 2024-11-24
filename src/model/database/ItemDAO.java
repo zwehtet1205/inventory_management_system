@@ -18,7 +18,7 @@ public class ItemDAO extends DBHandler{
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
-				Item i = new Item(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getInt(5),rs.getDouble(6),rs.getDouble(7),rs.getInt(8),rs.getInt(9),rs.getDate(10),rs.getDate(11));
+				Item i = new Item(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getDouble(5),rs.getInt(6),rs.getInt(7),rs.getDate(8),rs.getDate(9));
 				al.add(i);	
 			}
 			closeConnection();
@@ -106,7 +106,7 @@ public class ItemDAO extends DBHandler{
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
-				i = new Item(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getInt(5),rs.getDouble(6),rs.getDouble(7),rs.getInt(8),rs.getInt(9),rs.getDate(10),rs.getDate(11));
+				i = new Item(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getDouble(5),rs.getInt(6),rs.getInt(7),rs.getDate(8),rs.getDate(9));
 			}
 			closeConnection();
 		}catch(Exception e) 
@@ -127,7 +127,7 @@ public class ItemDAO extends DBHandler{
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
-				i = new Item(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getInt(5),rs.getDouble(6),rs.getDouble(7),rs.getInt(8),rs.getInt(9),rs.getDate(10),rs.getDate(11));
+				i = new Item(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getDouble(5),rs.getInt(6),rs.getInt(7),rs.getDate(8),rs.getDate(9));
 			}
 			closeConnection();
 		}catch(Exception e) 
@@ -148,7 +148,7 @@ public class ItemDAO extends DBHandler{
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
-				i = new Item(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getInt(5),rs.getDouble(6),rs.getDouble(7),rs.getInt(8),rs.getInt(9),rs.getDate(10),rs.getDate(11));
+				i = new Item(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getDouble(5),rs.getInt(6),rs.getInt(7),rs.getDate(8),rs.getDate(9));
 			}
 			closeConnection();
 		}catch(Exception e) 
@@ -192,6 +192,28 @@ public class ItemDAO extends DBHandler{
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static int getRemainingQty(int warehouse_id,int item_id)
+	{
+		int remainingQty = 0;
+		try {
+			openConnection();
+			String sql = "SELECT getremainingqty_fun(?,?)";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, warehouse_id);
+			ps.setInt(2, item_id);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				remainingQty = rs.getInt(1);
+			}
+			closeConnection();
+		}catch(Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return remainingQty;
 	}
 
 }

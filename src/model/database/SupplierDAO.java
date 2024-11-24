@@ -30,6 +30,27 @@ public class SupplierDAO extends DBHandler {
 		return al;
 	}
 	
+	public static ArrayList<String> getAllSupplierName() 
+	{
+		ArrayList<String> al = new ArrayList<>();
+		try {
+			openConnection();
+			String sql = "SELECT name FROM people WHERE status = 1 and type = 2";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				
+				al.add(rs.getString(1));	
+			}
+			closeConnection();
+		}catch(Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return al;
+	}
+	
 	public static boolean existSupplier(String name)
 	{
 		try {

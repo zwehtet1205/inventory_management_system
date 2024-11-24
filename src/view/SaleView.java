@@ -1,5 +1,6 @@
 package view;
 
+import controller.CustomerControllers;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -33,7 +34,8 @@ public class  SaleView {
 		
 		saleBP = new BorderPane();
 		saleBP.setTop(menuHB);
-		saleBP.setCenter(new CustomerSV().getContent());
+		saleBP.setCenter(new CustomerControllers(new CustomerSV()).getView().getContent());
+		
 		
 	}
 	
