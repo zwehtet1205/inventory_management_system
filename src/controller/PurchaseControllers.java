@@ -10,9 +10,8 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
-
-import model.*;
-import model.database.*;
+import model.dao.*;
+import model.entities.*;
 import view.*;
 import view.templates.Voucher;
 

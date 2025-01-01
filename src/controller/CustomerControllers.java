@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
-
-import model.*;
-import model.database.CustomerDAO;
+import model.dao.CustomerDAO;
+import model.entities.*;
 import view.*;
 
 public class CustomerControllers{

@@ -5,7 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import model.*;
+import model.entities.*;
 import view.templates.ViewCard;
 
 public class SupplierPV {

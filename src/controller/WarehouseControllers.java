@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
-
-import model.*;
-import model.database.WarehouseDAO;
+import model.dao.WarehouseDAO;
+import model.entities.*;
 import view.*;
 
 public class WarehouseControllers{

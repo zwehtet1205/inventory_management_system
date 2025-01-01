@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.DateCell;
 import javafx.scene.layout.VBox;
-import model.StockDetail;
-import model.database.*;
+import model.dao.*;
+import model.entities.StockDetail;
 import view.StockListsIV;
 
 
