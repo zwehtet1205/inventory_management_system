@@ -10,8 +10,8 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
+import model.*;
 import model.dao.*;
-import model.entities.*;
 import view.*;
 import view.templates.Voucher;
 
@@ -94,7 +94,7 @@ public class PurchaseControllers{
 			String name = view.gettName().getText();
 			if(ItemDAO.existItems(name))
 			{
-				Item i = ItemDAO.getItems(name);
+				Product i = ItemDAO.getItems(name);
 				view.gettCode().setText(i.getCode());
 			}
 			else{
@@ -110,7 +110,7 @@ public class PurchaseControllers{
 			String code = view.gettCode().getText();
 			if(ItemDAO.existItem(code))
 			{
-				Item i = ItemDAO.getItem(code);
+				Product i = ItemDAO.getItem(code);
 				view.gettName().setText(i.getName());
 			}
 			else{

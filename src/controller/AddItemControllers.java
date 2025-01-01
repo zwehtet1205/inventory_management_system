@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
+import model.*;
 import model.dao.*;
-import model.entities.*;
 import view.*;
 
 public class AddItemControllers{
 	
 	private final AddNewItemIV view;
 	
-	private TableViewSelectionModel<Item> selectionModel;
+	private TableViewSelectionModel<Product> selectionModel;
 	
 	
 	public AddItemControllers(AddNewItemIV view)
@@ -29,7 +29,7 @@ public class AddItemControllers{
 	
 	
 	public void setDataToCategoryTB() {
-		ArrayList<Item> al = ItemDAO.getAllItems();
+		ArrayList<Product> al = ItemDAO.getAllItems();
 		view.getTvItems().getItems().addAll(al);
 	} 
 	
@@ -107,7 +107,7 @@ public class AddItemControllers{
 	{
 		
 		
-		Item i = selectionModel.getSelectedItem();
+		Product i = selectionModel.getSelectedItem();
 		
 		if(i != null)
 		{

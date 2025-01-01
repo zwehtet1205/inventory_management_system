@@ -5,7 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import model.entities.Category;
+import model.Category;
 import view.templates.ViewCard;
 
 public class AddCategoryIV {

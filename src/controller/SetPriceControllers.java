@@ -5,15 +5,15 @@ import java.util.ArrayList;
 
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
+import model.*;
 import model.dao.*;
-import model.entities.*;
 import view.*;
 
 public class SetPriceControllers{
 	
 	private final SetPriceIV view;
 	
-	private TableViewSelectionModel<Item> selectionModel;
+	private TableViewSelectionModel<Product> selectionModel;
 	
 	
 	public SetPriceControllers(SetPriceIV view)
@@ -29,7 +29,7 @@ public class SetPriceControllers{
 	
 	
 	public void setDataToItemTB() {
-		ArrayList<Item> al = ItemDAO.getAllItems();
+		ArrayList<Product> al = ItemDAO.getAllItems();
 		view.getTvItems().getItems().addAll(al);
 	} 
 	
@@ -106,7 +106,7 @@ public class SetPriceControllers{
 	{
 		
 		
-		Item i = selectionModel.getSelectedItem();
+		Product i = selectionModel.getSelectedItem();
 		
 		if(i != null)
 		{

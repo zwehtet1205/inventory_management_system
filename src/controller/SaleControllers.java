@@ -10,8 +10,8 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView.TableViewSelectionModel;
+import model.*;
 import model.dao.*;
-import model.entities.*;
 import view.*;
 import view.templates.Voucher;
 
@@ -94,7 +94,7 @@ public class SaleControllers{
 			String name = view.gettName().getText();
 			if(ItemDAO.existItems(name))
 			{
-				Item i = ItemDAO.getItems(name);
+				Product i = ItemDAO.getItems(name);
 				view.gettCode().setText(i.getCode());
 				
 				remainingQty = ItemDAO.getRemainingQty(WarehouseDAO.getWarehouse(view.getCbBWarehouse().getValue()).getId(), i.getId());
@@ -119,7 +119,7 @@ public class SaleControllers{
 			String code = view.gettCode().getText();
 			if(ItemDAO.existItem(code))
 			{
-				Item i = ItemDAO.getItem(code);
+				Product i = ItemDAO.getItem(code);
 				view.gettName().setText(i.getName());
 				
 				remainingQty = ItemDAO.getRemainingQty(WarehouseDAO.getWarehouse(view.getCbBWarehouse().getValue()).getId(), i.getId());
@@ -263,7 +263,7 @@ public class SaleControllers{
 				
 				if(ItemDAO.existItem(code))
 				{
-					Item i = ItemDAO.getItem(code);
+					Product i = ItemDAO.getItem(code);
 					view.getTvSales().getItems().add(new Sale(i.getId(),qty));
 					setDataToSubTotal();
 				}
@@ -295,7 +295,7 @@ public class SaleControllers{
 		
 		if(s != null)
 		{
-			Item i = ItemDAO.getItem(s.getItem_id());
+			Product i = ItemDAO.getItem(s.getItem_id());
 			String code = i.getCode();
 			String name = s.getItem_name();
 			Integer qty = s.getQty();

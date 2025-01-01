@@ -5,7 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import model.entities.*;
+import model.*;
 import view.templates.ViewCard;
 
 public class SetPriceIV {
@@ -14,9 +14,9 @@ public class SetPriceIV {
 	private TextField tCode,tPrice;
 	private Button btnCancel,btnSet;
 	
-	private TableView<Item> tvItems;
-	private TableColumn<Item,String> codeCol,nameCol;
-	private TableColumn<Item,Double> priceCol;
+	private TableView<Product> tvItems;
+	private TableColumn<Product,String> codeCol,nameCol;
+	private TableColumn<Product,Double> priceCol;
 	
 	private ViewCard card;
 	
@@ -93,19 +93,19 @@ public class SetPriceIV {
 	}
 	
 	public void createSetPriceItemTB() {
-		tvItems = new TableView<Item>();
+		tvItems = new TableView<Product>();
 		
-		codeCol = new TableColumn<Item,String>("CODE");
-		codeCol.setCellValueFactory(new PropertyValueFactory<Item,String>("code"));
+		codeCol = new TableColumn<Product,String>("CODE");
+		codeCol.setCellValueFactory(new PropertyValueFactory<Product,String>("code"));
 		codeCol.setPrefWidth(100);
 		
-		nameCol = new TableColumn<Item,String>("NAME");
-		nameCol.setCellValueFactory(new PropertyValueFactory<Item,String>("name"));
+		nameCol = new TableColumn<Product,String>("NAME");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Product,String>("name"));
 		nameCol.setPrefWidth(200);
 		nameCol.setSortable(true);
 		
-		priceCol = new TableColumn<Item,Double>("PRICE");
-		priceCol.setCellValueFactory(new PropertyValueFactory<Item,Double>("price"));
+		priceCol = new TableColumn<Product,Double>("PRICE");
+		priceCol.setCellValueFactory(new PropertyValueFactory<Product,Double>("price"));
 		priceCol.setPrefWidth(200);
 		
 		
@@ -187,35 +187,35 @@ public class SetPriceIV {
 		this.btnSet = btnSet;
 	}
 
-	public TableView<Item> getTvItems() {
+	public TableView<Product> getTvItems() {
 		return tvItems;
 	}
 
-	public void setTvItems(TableView<Item> tvItems) {
+	public void setTvItems(TableView<Product> tvItems) {
 		this.tvItems = tvItems;
 	}
 
-	public TableColumn<Item, String> getCodeCol() {
+	public TableColumn<Product, String> getCodeCol() {
 		return codeCol;
 	}
 
-	public void setCodeCol(TableColumn<Item, String> codeCol) {
+	public void setCodeCol(TableColumn<Product, String> codeCol) {
 		this.codeCol = codeCol;
 	}
 
-	public TableColumn<Item, String> getNameCol() {
+	public TableColumn<Product, String> getNameCol() {
 		return nameCol;
 	}
 
-	public void setNameCol(TableColumn<Item, String> nameCol) {
+	public void setNameCol(TableColumn<Product, String> nameCol) {
 		this.nameCol = nameCol;
 	}
 
-	public TableColumn<Item, Double> getPriceCol() {
+	public TableColumn<Product, Double> getPriceCol() {
 		return priceCol;
 	}
 
-	public void setPriceCol(TableColumn<Item, Double> priceCol) {
+	public void setPriceCol(TableColumn<Product, Double> priceCol) {
 		this.priceCol = priceCol;
 	}
 

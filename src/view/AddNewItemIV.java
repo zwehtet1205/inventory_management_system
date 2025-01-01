@@ -4,7 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import model.entities.*;
+import model.*;
 import view.templates.ViewCard;
 
 public class AddNewItemIV {
@@ -16,9 +16,9 @@ public class AddNewItemIV {
 	private CheckBox chBStatus;
 	private Button btnCancel,btnUpdate,btnAdd;
 	
-	private TableView<Item> tvItems;
-	private TableColumn<Item,String> codeCol,nameCol,categoryCol;
-	private TableColumn<Item,Integer> statusCol;
+	private TableView<Product> tvItems;
+	private TableColumn<Product,String> codeCol,nameCol,categoryCol;
+	private TableColumn<Product,Integer> statusCol;
 	
 	private ViewCard card;
 	
@@ -107,23 +107,23 @@ public class AddNewItemIV {
 	}
 	
 	public void createAddItemTB() {
-		tvItems = new TableView<Item>();
+		tvItems = new TableView<Product>();
 		
-		codeCol = new TableColumn<Item,String>("CODE");
-		codeCol.setCellValueFactory(new PropertyValueFactory<Item,String>("code"));
+		codeCol = new TableColumn<Product,String>("CODE");
+		codeCol.setCellValueFactory(new PropertyValueFactory<Product,String>("code"));
 		codeCol.setPrefWidth(100);
 		
-		nameCol = new TableColumn<Item,String>("NAME");
-		nameCol.setCellValueFactory(new PropertyValueFactory<Item,String>("name"));
+		nameCol = new TableColumn<Product,String>("NAME");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Product,String>("name"));
 		nameCol.setPrefWidth(200);
 		nameCol.setSortable(true);
 		
-		categoryCol = new TableColumn<Item,String>("CATEGORY");
-		categoryCol.setCellValueFactory(new PropertyValueFactory<Item,String>("category"));
+		categoryCol = new TableColumn<Product,String>("CATEGORY");
+		categoryCol.setCellValueFactory(new PropertyValueFactory<Product,String>("category"));
 		categoryCol.setPrefWidth(250);
 		
-		statusCol = new TableColumn<Item,Integer>("STATUS");
-		statusCol.setCellValueFactory(new PropertyValueFactory<Item,Integer>("status"));
+		statusCol = new TableColumn<Product,Integer>("STATUS");
+		statusCol.setCellValueFactory(new PropertyValueFactory<Product,Integer>("status"));
 		statusCol.setPrefWidth(80);
 		
 		tvItems.getColumns().add(codeCol);
@@ -230,11 +230,11 @@ public class AddNewItemIV {
 	public void setBtnAdd(Button btnAdd) {
 		this.btnAdd = btnAdd;
 	}
-	public TableView<Item> getTvItems() {
+	public TableView<Product> getTvItems() {
 		return tvItems;
 	}
 
-	public void setTvItems(TableView<Item> tvItems) {
+	public void setTvItems(TableView<Product> tvItems) {
 		this.tvItems = tvItems;
 	}
 

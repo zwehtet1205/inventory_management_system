@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import model.entities.*;
+import model.*;
 import view.templates.*;
 
 public class PurchasePV {
