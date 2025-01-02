@@ -53,8 +53,9 @@ public abstract class SystemModel<T> {
     }
 
     // Generic method to fetch all records from the table
-    public static <T> List<T> getAll(Class<T> clazz, String tableName) {
+    public static <T> List<T> getAll(Class<T> clazz) {
         List<T> list = new ArrayList<>();
+        String tableName = Pluralizer.getTableName(clazz);
         String sql = "SELECT * FROM " + tableName;
 
         try {
@@ -96,8 +97,9 @@ public abstract class SystemModel<T> {
     }
     
     // Static method to fetch one record by ID
-    public static <T> T findOrFail(Class<T> clazz, String tableName, Object id) {
+    public static <T> T findOrFail(Class<T> clazz, Object id) {
         T obj = null;
+        String tableName = Pluralizer.getTableName(clazz);
         String sql = "SELECT * FROM " + tableName + " WHERE id = ?";
 
         try {
@@ -107,6 +109,51 @@ public abstract class SystemModel<T> {
 
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setObject(1, id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        // Create a new instance of the class
+                        Field[] fields = clazz.getDeclaredFields();
+                        Constructor<T> constructor = clazz.getDeclaredConstructor();
+                        constructor.setAccessible(true);
+                        obj = constructor.newInstance();
+
+                        // Set values for each field in the object
+                        for (Field field : fields) {
+                            field.setAccessible(true);
+                            String fieldName = field.getName();
+                            try {
+                                Object value = rs.getObject(fieldName);
+                                field.set(obj, value);
+                            } catch (SQLException ignored) {
+                                // Ignore if the field does not match the column
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return obj;
+    }
+    
+ // Static method to fetch one record by ID
+    public static <T> T findOrFail(Class<T> clazz,String column, Object val) {
+        T obj = null;
+        String tableName = Pluralizer.getTableName(clazz);
+        String sql = "SELECT * FROM " + tableName + " WHERE " + column + " = ?";
+
+        try {
+            if (!openConnection()) {
+                throw new SQLException("Failed to open database connection");
+            }
+
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setObject(1, val);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         // Create a new instance of the class
@@ -157,8 +204,9 @@ public abstract class SystemModel<T> {
     }
     
     // Static method to fetch records with applied conditions
-    public static <T> List<T> get(Class<T> clazz, String tableName) {
+    public static <T> List<T> get(Class<T> clazz) {
         List<T> list = new ArrayList<>();
+        String tableName = Pluralizer.getTableName(clazz);
         StringBuilder sql = new StringBuilder("SELECT * FROM " + tableName);
 
         if (!conditions.isEmpty()) {
@@ -256,7 +304,7 @@ public abstract class SystemModel<T> {
     }
     
     // Static method to check if a record exists with the given conditions
-    public static boolean isExist(String column, Object value, String tableName) {
+    public static boolean isExist(String column, Object value,String tableName) {
         boolean exists = false;
         String sql = "SELECT 1 FROM " + tableName + " WHERE " + column + " = ? LIMIT 1";
 
@@ -431,4 +479,15 @@ public abstract class SystemModel<T> {
 
         return isSuccess;
     }
+    
+	public Class<T> getClazz() {
+		return clazz;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+	
+    
+    
 }
