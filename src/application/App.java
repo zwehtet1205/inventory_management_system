@@ -1,15 +1,15 @@
 package application;
 
-import controller.MainUIControllers;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
-import view.*;
+import view.layouts.MainUI;
 
 public class App extends Application{
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		MainUI mainUI = new MainUIControllers(new MainUI()).getView();
+		MainUI mainUI = new MainUI();
 		stage.setScene(mainUI.getScene());
 		stage.setTitle("Accouning System");
 		stage.show();
