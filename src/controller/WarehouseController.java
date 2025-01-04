@@ -37,11 +37,11 @@ public class WarehouseController {
     }
 
     // Delete warehouse by ID
-    public static boolean delete(int id) {
-        Warehouse warehouse = Warehouse.findOrFail(Warehouse.class, id);
-        
-        return warehouse.delete();
-    }
+//    public static boolean delete(int id) {
+//        Warehouse warehouse = Warehouse.findOrFail(Warehouse.class, id);
+//        
+//        return warehouse.delete();
+//    }
 
     // Check if warehouse exists
     public static boolean exist(int id) {

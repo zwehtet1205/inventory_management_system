@@ -37,7 +37,7 @@ public class PaymentController {
     public static boolean delete(int id) {
         Payment payment = Payment.findOrFail(Payment.class, id);
         
-        return payment.delete();
+        return payment.delete(payment);
     }
 
     // Check if a payment method exists

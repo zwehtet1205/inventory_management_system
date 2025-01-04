@@ -48,11 +48,11 @@ public class ProductController {
 	}
 	
 	// delete product
-	public static boolean delete(int id) {
-		Product product = Product.findOrFail(Product.class, id);
-		
-		return product.delete();
-	}
+//	public static boolean delete(int id) {
+//		Product product = Product.findOrFail(Product.class, id);
+//		
+//		return product.delete();
+//	}
 	
     // check exist 
  	public static boolean exist(int id) {

@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import javafx.scene.image.*;
 
 public class Icon {
-	private static String dir = "resources/img/",imgExtension = ".png";
+	private static String dir = "resources/img/color-icons/",imgExtension = ".png";
 	private static FileInputStream f;
 	private static ImageView imv;
 	

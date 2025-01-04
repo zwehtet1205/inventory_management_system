@@ -1,129 +1,210 @@
 package view.layouts;
 
+import java.lang.reflect.Array;
 import java.net.URL;
-import javafx.geometry.Insets;
+import java.util.Arrays;
+import java.util.List;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import libraries.Icon;
-import controller.*;
+
+
+import view.products.*;
+import view.templates.Breadcrumb;
+import view.categories.*;
+
 
 public class MainUI {
     private Scene mainScene;
-    private Label lAppName, lHome, lInventories, lSuppliers, lCustomers, lPurchases, lSales, lIncomes, lExpenses, lUsers, lLogouts, lNotification, lUsername, username;
+    private Label lAppName, lDashboard, lProducts, lSuppliers, lCustomers, lPurchases, lSales, lCategories, lWarehouses, lUsers, lLogouts, lNotification, lUsername, username;
     private TextField tSearch;
     private Button btnSearch;
 
     private BorderPane layout;
     private VBox sidebar;
     private HBox topbar;
-    private VBox footer;
+    
+    private Breadcrumb breadcrumb;
+    
+    List<Label> menuItems ;
 
     public MainUI() {
         initializeComponents();
         createLayoutStructure();
         styleComponents();
+        setActions();
 
         mainScene = new Scene(layout, 1366, 768);
         URL url = this.getClass().getResource("../css/style.css");
         if (url != null) {
             mainScene.getStylesheets().add(url.toExternalForm());
         }
+        
     }
 
     private void initializeComponents() {
         // Sidebar labels
-        lAppName = new Label("Accounting System");
-        lHome = new Label("Home");
-        lInventories = new Label("Inventories");
-        lSuppliers = new Label("Suppliers");
-        lCustomers = new Label("Customers");
-        lPurchases = new Label("Purchases");
-        lSales = new Label("Sales");
-        lIncomes = new Label("Incomes");
-        lExpenses = new Label("Expenses");
-        lUsers = new Label("Users");
-        lLogouts = new Label("Log Out");
+        lAppName = new Label("  Inventory Management System");
+        lDashboard = new Label("  Dashboard");
+        lProducts = new Label("  Products");
+        lSuppliers = new Label("  Suppliers");
+        lCustomers = new Label("  Customers");
+        lPurchases = new Label("  Purchases");
+        lSales = new Label("  Sales");
+        lCategories = new Label("  Categories");
+        lWarehouses = new Label("  Warehouses");
+        lUsers = new Label("  Users");
+        lLogouts = new Label("  Log Out");
 
         // Notification and User Info
         lNotification = new Label();
-        lUsername = new Label("Username:");
-        username = new Label("Admin");
+        lUsername = new Label();
+        username = new Label("  Admin");
 
         // Search bar
         tSearch = new TextField();
         tSearch.setPromptText("Search Something...");
-        tSearch.setPrefWidth(300);
 
         btnSearch = new Button("Search");
         
         // Start adding icons for left menu bar Section 
-		lHome.setGraphic(Icon.get("dashboard",24));
-		lInventories.setGraphic(Icon.get("inventory",24));
-		lSuppliers.setGraphic(Icon.get("supplier",24));
-		lCustomers.setGraphic(Icon.get("customer",24));
-		lPurchases.setGraphic(Icon.get("purchase",24));
-		lSales.setGraphic(Icon.get("sale",24));
-		lIncomes.setGraphic(Icon.get("income",24));
-		lExpenses.setGraphic(Icon.get("expense",24));
-		lUsers.setGraphic(Icon.get("user",24));
-		lLogouts.setGraphic(Icon.get("logout",24));
+        lAppName.setGraphic(Icon.get("inventory-management", 35));
+		lDashboard.setGraphic(Icon.get("dashboard",30));
+		lProducts.setGraphic(Icon.get("product",30));
+		lSuppliers.setGraphic(Icon.get("supplier",30));
+		lCustomers.setGraphic(Icon.get("customer",30));
+		lPurchases.setGraphic(Icon.get("purchase",30));
+		lSales.setGraphic(Icon.get("sale",30));
+		lCategories.setGraphic(Icon.get("category",30));
+		lWarehouses.setGraphic(Icon.get("warehouse",30));
+		lUsers.setGraphic(Icon.get("user",30));
+		lLogouts.setGraphic(Icon.get("logout",30));
 		
-		lNotification.setGraphic(Icon.get("notification",24));
+		lNotification.setGraphic(Icon.get("notifications",30));
+		lUsername.setGraphic(Icon.get("profile",30));
+		
+		
+		
+		menuItems = Arrays.asList(lDashboard,lProducts,lSuppliers,lCustomers,lPurchases,lSales,lCategories,lWarehouses,lUsers);
+		
     }
 
     private void createLayoutStructure() {
         // Sidebar
-        VBox navItems = new VBox(0, lHome, lInventories, lSuppliers, lCustomers, lPurchases, lSales, lIncomes, lExpenses, lUsers);
+        VBox navItems = new VBox(0, lDashboard, lProducts, lSuppliers, lCustomers, lPurchases, lSales, lCategories, lWarehouses, lUsers);
         VBox logoutItem = new VBox(lLogouts);
-        sidebar = new VBox(20, navItems, logoutItem);
+        sidebar = new VBox(100, navItems, logoutItem);
         sidebar.setPrefWidth(250);
 
         // Topbar
         HBox appName = new HBox(lAppName);
-        appName.setAlignment(Pos.CENTER_RIGHT);
-        HBox searchBar = new HBox(10, tSearch, btnSearch);
+        appName.setAlignment(Pos.CENTER);
+        FlowPane searchBar = new FlowPane(10,0, tSearch, btnSearch);
         searchBar.setAlignment(Pos.CENTER);
-        HBox userInfo = new HBox(10, lNotification, lUsername, username);
+        FlowPane userInfo = new FlowPane(10,0 ,tSearch, lNotification, lUsername, username);
         userInfo.setAlignment(Pos.CENTER_RIGHT);
-        HBox nav = new HBox(30, searchBar);
-        nav.setPadding(new Insets(10));
-        nav.setAlignment(Pos.CENTER);
         
-
+       
         
-        topbar = new HBox(100, appName , nav);
-        topbar.setPadding(new Insets(10));
+        topbar = new HBox(520, appName , userInfo);
 
 
         // Main Layout
         layout = new BorderPane();
         layout.setLeft(sidebar);
-        layout.setCenter(new DashboardUI().getDashBoardView());
+        //layout.setCenter(new DashboardUI().getDashBoardView());
         layout.setTop(topbar);
+        
+        setBreadcrumb(new Breadcrumb(layout));
         
     }
 
     private void styleComponents() {
+    	
         layout.setId("layout-body");
+        
+        // Define variables dynamically
+        layout.setStyle(
+            "-primary-color: #736ced; " +
+            "-secondary-color: #fef9ff; " +
+            "-hover-color: #f2dfd7;" +
+            "-bg-color: #beb7a4"
+        );
+        
         sidebar.getStyleClass().add("sidebar");
         topbar.getStyleClass().add("topbar");
+        
+        tSearch.getStyleClass().add("search");
+       
 
         lAppName.getStyleClass().add("brand");
-        lHome.getStyleClass().add("nav-item");
-        lInventories.getStyleClass().add("nav-item");
+        username.getStyleClass().add("username");
+        
+        lDashboard.getStyleClass().add("nav-item");
+        lProducts.getStyleClass().add("nav-item");
         lSuppliers.getStyleClass().add("nav-item");
         lCustomers.getStyleClass().add("nav-item");
         lPurchases.getStyleClass().add("nav-item");
         lSales.getStyleClass().add("nav-item");
-        lIncomes.getStyleClass().add("nav-item");
-        lExpenses.getStyleClass().add("nav-item");
+        lCategories.getStyleClass().add("nav-item");
+        lWarehouses.getStyleClass().add("nav-item");
         lUsers.getStyleClass().add("nav-item");
-        lLogouts.getStyleClass().add("nav-logout");
+        lLogouts.getStyleClass().add("nav-item");
     }
+    
+    public void setActions() {
+    	lDashboard.setOnMouseClicked(e -> {
+    		layout.setCenter(new AddProduct().getContent());
+    	});
+    	lProducts.setOnMouseClicked(e -> {
+    		layout.setCenter(new ProductView().getContent());
+    		setActive(menuItems,lProducts);
+    	});
+    	lCategories.setOnMouseClicked(e -> {
+    		layout.setCenter(new CategoryView().getContent());
+    		setActive(menuItems,lCategories);
+    	});
+    }
+    
+    public void setActive(List<Label> menuItems, Label current) {
+        // Remove 'active' class from all labels
+        menuItems.forEach(label -> {
+            if (label != null ) {
+        		label.getStyleClass().remove("active");
+            }
+        });
+
+        // Add 'active' class to the clicked label
+        if (current != null) {
+            current.getStyleClass().add("active");
+        }
+
+        // Force UI refresh
+        current.applyCss();
+        current.requestLayout();
+    }
+
+
+
 
     public Scene getScene() {
         return mainScene;
     }
+    
+    public BorderPane getLayout() {
+    	return layout;
+    }
+
+	public Breadcrumb getBreadcrumb() {
+		return breadcrumb;
+	}
+
+	public void setBreadcrumb(Breadcrumb breadcrumb) {
+		this.breadcrumb = breadcrumb;
+	}
+
+
 }

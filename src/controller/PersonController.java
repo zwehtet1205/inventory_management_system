@@ -43,7 +43,7 @@ public class PersonController {
     public static boolean delete(int id) {
         Person person = Person.findOrFail(Person.class, id);
         
-        return person.delete();
+        return person.delete(person);
     }
     
     // check exist 

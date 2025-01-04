@@ -40,7 +40,7 @@ public class ContactController {
     public static boolean delete(int id) {
         Contact contact = Contact.findOrFail(Contact.class, id);
         
-        return contact.delete();
+        return contact.delete(contact);
     }
     
     // Check if contact exists

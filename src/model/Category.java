@@ -72,8 +72,12 @@ public class Category extends SystemModel<Category> {
 		this.updated_at = updated_at;
 	}
 	
+	public String getStatusName() {
+		return Status.findOrFail(Status.class, getStatus_id()).getName();
+	}
 	
-	
-	
+	public String toString() {
+		return this.name;
+	}
 	
 }

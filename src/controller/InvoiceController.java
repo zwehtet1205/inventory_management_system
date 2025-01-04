@@ -48,7 +48,7 @@ public class InvoiceController {
     public static boolean delete(int id) {
         Invoice invoice = Invoice.findOrFail(Invoice.class, id);
         
-        return invoice.delete();
+        return invoice.delete(invoice);
     }
     
     // check exist 

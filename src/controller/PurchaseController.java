@@ -48,11 +48,11 @@ public class PurchaseController {
     }
 
     // Delete purchase by ID
-    public static boolean delete(int id) {
-        Purchase purchase = Purchase.findOrFail(Purchase.class, id);
-        
-        return purchase.delete();
-    }
+//    public static boolean delete(int id) {
+//        Purchase purchase = Purchase.findOrFail(Purchase.class, id);
+//        
+//        return purchase.delete();
+//    }
     
     // check exist 
  	public static boolean exist(int id) {

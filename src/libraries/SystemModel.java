@@ -2,6 +2,7 @@ package libraries;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.*;
 
@@ -328,6 +329,41 @@ public abstract class SystemModel<T> {
 
         return exists;
     }
+    
+    public static boolean isExist(String column, Object value, String tableName, Object id) {
+        boolean exists = false;
+        String sql = "SELECT 1 FROM " + tableName + " WHERE " + column + " = ?";
+
+        if (id != null) {
+            sql += " AND id <> ?";
+        }
+
+        sql += " LIMIT 1";
+
+        try {
+            if (!openConnection()) {
+                throw new Exception("Failed to open database connection");
+            }
+
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setObject(1, value);
+                if (id != null) {
+                    ps.setObject(2, id);
+                }
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    exists = rs.next();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return exists;
+    }
+
 
     // Static method to save an object (insert or update)
     public boolean save() {
@@ -411,9 +447,144 @@ public abstract class SystemModel<T> {
 
         return isSuccess;
     }
+    
+    public boolean add(T obj) {
+        boolean isSuccess = false;
 
-    // Static method to delete a record
-    public boolean delete() {
+        try {
+            if (!openConnection()) {
+                throw new Exception("Failed to open database connection");
+            }
+
+            StringBuilder sql = new StringBuilder("INSERT INTO " + tableName + " (");
+            StringBuilder placeholders = new StringBuilder();
+            Field[] fields = clazz.getDeclaredFields();
+
+            for (Field field : fields) {
+                field.setAccessible(true);
+                String fieldName = field.getName();
+
+                if (!"id".equalsIgnoreCase(fieldName)) { // Exclude primary key if auto-incremented
+                    sql.append(fieldName).append(", ");
+                    placeholders.append("?, ");
+                }
+            }
+
+            sql.setLength(sql.length() - 2); // Remove trailing comma
+            placeholders.setLength(placeholders.length() - 2); // Remove trailing comma
+            sql.append(") VALUES (").append(placeholders).append(")");
+
+            try (PreparedStatement ps = con.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS)) {
+                int index = 1;
+
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    String fieldName = field.getName();
+
+                    if (!"id".equalsIgnoreCase(fieldName)) { // Exclude primary key
+                        Object value = field.get(obj);
+                        ps.setObject(index++, value);
+                    }
+                }
+
+                isSuccess = ps.executeUpdate() > 0;
+
+                // Handle auto-generated ID
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        try {
+                        	Field idField = clazz.getDeclaredField("id");
+                        	idField.setAccessible(true);
+
+                        	Object generatedId = rs.getObject(1);
+                        	if (generatedId instanceof BigInteger) {
+                        	    idField.set(obj, ((BigInteger) generatedId).intValue());
+                        	} else if (generatedId instanceof Number) {
+                        	    idField.set(obj, ((Number) generatedId).intValue());
+                        	} else {
+                        	    idField.set(obj, generatedId);
+                        	}
+
+                        } catch (NoSuchFieldException e) {
+                            System.out.println("No 'id' field found in class " + clazz.getSimpleName());
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    
+    // Dynamic update method to update data
+    public boolean update(T obj) {
+        boolean isSuccess = false;
+
+        try {
+            if (!openConnection()) {
+                throw new Exception("Failed to open database connection");
+            }
+
+            StringBuilder sql = new StringBuilder("UPDATE " + tableName + " SET ");
+            Field[] fields = clazz.getDeclaredFields();
+            Object primaryKeyValue = null;
+
+            for (Field field : fields) {
+                field.setAccessible(true);
+                String fieldName = field.getName();
+
+                if ("id".equalsIgnoreCase(fieldName)) {
+                    primaryKeyValue = field.get(obj); // Store the primary key value
+                } else {
+                    sql.append(fieldName).append(" = ?, ");
+                }
+            }
+
+            sql.setLength(sql.length() - 2); // Remove trailing comma
+            sql.append(" WHERE id = ?");
+
+            if (primaryKeyValue == null) {
+                throw new Exception("Primary key (id) value is null. Cannot update record.");
+            }
+
+            try (PreparedStatement ps = con.prepareStatement(sql.toString())) {
+                int index = 1;
+
+                // Set values for all fields except the primary key
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    String fieldName = field.getName();
+
+                    if (!"id".equalsIgnoreCase(fieldName)) {
+                        Object value = field.get(obj);
+                        ps.setObject(index++, value);
+                    }
+                }
+
+                // Set the primary key value
+                ps.setObject(index, primaryKeyValue);
+
+                isSuccess = ps.executeUpdate() > 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+
+    
+ // Delete method based on an object's non-null fields
+    public boolean delete(T obj) {
         boolean isSuccess = false;
 
         try {
@@ -425,48 +596,31 @@ public abstract class SystemModel<T> {
             Field[] fields = clazz.getDeclaredFields();
 
             boolean hasConditions = false;
-            Object primaryKeyValue = null;
             for (Field field : fields) {
                 field.setAccessible(true);
-                Object value = field.get(this); // Using 'this' to refer to the current instance
+                Object value = field.get(obj);
 
-                if (value != null) {
-                    // Add non-null fields to the WHERE clause
+                if (value != null) { // Only include non-null fields in the WHERE clause
                     sql.append(field.getName()).append(" = ? AND ");
                     hasConditions = true;
-                }
-
-                // If the field is 'id', capture its value for the WHERE clause
-                if ("id".equalsIgnoreCase(field.getName())) {
-                    primaryKeyValue = value;
                 }
             }
 
             if (!hasConditions) {
-                if (primaryKeyValue == null) {
-                    throw new Exception("No conditions provided. Deleting all records is not allowed.");
-                }
-                sql.append("id = ?"); // Use the ID as the condition
-            } else {
-                sql.setLength(sql.length() - 5); // Remove the trailing " AND "
+                throw new Exception("No conditions provided. Deleting all records is not allowed.");
             }
+
+            sql.setLength(sql.length() - 5); // Remove trailing " AND "
 
             try (PreparedStatement ps = con.prepareStatement(sql.toString())) {
                 int index = 1;
-
-                // Bind parameters for the non-null fields
                 for (Field field : fields) {
                     field.setAccessible(true);
-                    Object value = field.get(this);
+                    Object value = field.get(obj);
 
-                    if (value != null) {
+                    if (value != null) { // Only bind non-null fields
                         ps.setObject(index++, value);
                     }
-                }
-
-                // Bind ID for deletion
-                if (primaryKeyValue != null) {
-                    ps.setObject(index, primaryKeyValue);
                 }
 
                 isSuccess = ps.executeUpdate() > 0;

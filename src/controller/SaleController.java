@@ -47,11 +47,11 @@ public class SaleController {
     }
 
     // Delete sale by ID
-    public static boolean delete(int id) {
-        Sale sale = Sale.findOrFail(Sale.class, id);
-        
-        return sale.delete();
-    }
+//    public static boolean delete(int id) {
+//        Sale sale = Sale.findOrFail(Sale.class, id);
+//        
+//        return sale.delete();
+//    }
     
     // Check if sale exists
     public static boolean exist(int id) {
