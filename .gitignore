@@ -29,5 +29,8 @@ replay_pid*
 *.idea/*.*
 *.project
 *.settings/*.*
+*.classpath
+
+util/
 
 

@@ -266,39 +266,47 @@ public class ProductView extends MainUI {
     	
     	lAddProduct.setOnMouseClicked(e-> { 		
     		addProduct();
+    		
+    		if(ans.isPresent() && ans.get()==ButtonType.OK)
+    		{
+        		// Gather inputs
+                Map<String, String> inputs = new HashMap<>();
+                inputs.put("code", tCode.getText());
+                inputs.put("name", tName.getText());
+                inputs.put("cost_price", tCostPrice.getText());
+                inputs.put("selling_price", tSellingPrice.getText());
+
+                // Define validation rules
+                Map<String, String> rules = new HashMap<>();
+                rules.put("code", "required|min:3|max:30|unique:products,code");
+                rules.put("name", "required|min:3|max:30");
+                rules.put("cost_price", "required|numeric");
+                rules.put("selling_price", "required|numeric");
+
+                // Validate
+                Map<String, String> errors = validator.validate(inputs, rules);
+
+                // Display errors
+                lCodeErr.setText(errors.getOrDefault("code", ""));
+                lNameErr.setText(errors.getOrDefault("name", ""));
+                lCostPriceErr.setText(errors.getOrDefault("cost_price", ""));
+                lSellingPriceErr.setText(errors.getOrDefault("cost_price", ""));
+
+                // Check if there are errors
+                if (!errors.isEmpty()) {
+                    addProduct();
+                } else {
+                	cleanErr();
+                }
+    			
+    		} else if( ans.get()==ButtonType.CANCEL) {
+    			cleanErr();
+    		} else {
+    			cleanErr();
+    		}
     	});
     	
-    	if(ans.isPresent() && ans.get()==ButtonType.OK)
-		{
-    		// Gather inputs
-            Map<String, String> inputs = new HashMap<>();
-            inputs.put("code", tCode.getText());
-            inputs.put("name", tName.getText());
-            inputs.put("cost_price", tCostPrice.getText());
-            inputs.put("selling_price", tSellingPrice.getText());
-
-            // Define validation rules
-            Map<String, String> rules = new HashMap<>();
-            rules.put("code", "required|min:3|max:30|unique:categories,code");
-            rules.put("name", "required|min:3|max:30");
-            rules.put("cost_price", "required|numeric");
-            rules.put("selling_price", "required|numeric");
-
-            // Validate
-            Map<String, String> errors = validator.validate(inputs, rules);
-
-            // Display errors
-            lCodeErr.setText(errors.getOrDefault("name", ""));
-            lNameErr.setText(errors.getOrDefault("name", ""));
-            lCostPriceErr.setText(errors.getOrDefault("cost_price", ""));
-            lSellingPriceErr.setText(errors.getOrDefault("cost_price", ""));
-
-            // Handle successful form submission
-            if (errors.isEmpty()) {
-                
-            }
-			
-		}
+    	
     }
     
     public void addProduct() {
@@ -319,6 +327,13 @@ public class ProductView extends MainUI {
 		
 		ans = alt.showAndWait();
 	}
+    
+    public void cleanErr() {
+    	lCodeErr.setText("");
+    	lNameErr.setText("");
+    	lCostPriceErr.setText("");
+    	lSellingPriceErr.setText("");
+    }
     
     public void setContent(VBox content) {
     	this.content = content;
