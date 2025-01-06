@@ -1,5 +1,6 @@
 package model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import libraries.SystemModel;
@@ -12,8 +13,8 @@ public class Product extends SystemModel<Product> {
 	private String name;
 	private int category_id;
 	private int quantity;
-	private double cost_price;
-	private double selling_price;
+	private BigDecimal cost_price;
+	private BigDecimal selling_price;
 	private int status_id;
 	private int created_by;
 	private Date created_at;
@@ -21,8 +22,8 @@ public class Product extends SystemModel<Product> {
 	public Product() {
 		super(Product.class,"products");
 	}
-	public Product(int id, String code, String name, int category_id, int quantity, double cost_price,
-			double selling_price, int status_id, int created_by, Date created_at, Date updated_at) {
+	public Product(int id, String code, String name, int category_id, int quantity, BigDecimal cost_price,
+			BigDecimal selling_price, int status_id, int created_by, Date created_at, Date updated_at) {
 		this();
 		this.id = id;
 		this.code = code;
@@ -60,22 +61,25 @@ public class Product extends SystemModel<Product> {
 	public void setCategory_id(int category_id) {
 		this.category_id = category_id;
 	}
+	public Category getCategory() {
+		return SystemModel.findOrFail(Category.class, category_id);
+	}
 	public int getQuantity() {
 		return quantity;
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public double getCost_price() {
+	public BigDecimal getCost_price() {
 		return cost_price;
 	}
-	public void setCost_price(double cost_price) {
+	public void setCost_price(BigDecimal cost_price) {
 		this.cost_price = cost_price;
 	}
-	public double getSelling_price() {
+	public BigDecimal getSelling_price() {
 		return selling_price;
 	}
-	public void setSelling_price(double selling_price) {
+	public void setSelling_price(BigDecimal selling_price) {
 		this.selling_price = selling_price;
 	}
 	public int getStatus_id() {
@@ -90,6 +94,10 @@ public class Product extends SystemModel<Product> {
 	public void setCreated_by(int created_by) {
 		this.created_by = created_by;
 	}
+	
+	public Status getStatus() {
+		return SystemModel.findOrFail(Status.class, status_id);
+	}
 	public Date getCreated_at() {
 		return created_at;
 	}
@@ -102,6 +110,8 @@ public class Product extends SystemModel<Product> {
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
 	}
+	
+
 	
 	
 

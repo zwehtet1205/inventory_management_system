@@ -7,9 +7,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import libraries.Confirm;
 import libraries.Icon;
 import libraries.Validator;
 import model.Category;
+import model.Status;
 import view.layouts.MainUI;
 import view.templates.ViewCard;
 
@@ -23,7 +25,8 @@ public class CategoryView extends MainUI {
     private Button btnCancel, btnAdd, btnUpdate;
 
     private TableView<Category> tvCategories;
-    private TableColumn<Category, Integer> colNo,colStatus;
+    private TableColumn<Category, Integer> colNo;
+    private TableColumn<Category, Status> colStatus;
     private TableColumn<Category, String> colName, colDescription;
     private TableColumn<Category, Date> colCreatedAt, colUpdatedAt;
     private TableColumn<Category, Label> colAction;
@@ -38,6 +41,8 @@ public class CategoryView extends MainUI {
     
     private int selectedCategoryId;
     
+    private Confirm confirm;
+    
 
     public CategoryView() {
         initializeNodes();
@@ -49,6 +54,8 @@ public class CategoryView extends MainUI {
         getBreadcrumb().setCurrentPage("Categories");
         
         validator = new Validator();
+        
+        confirm = new Confirm();
     }
 
     public VBox getContent() {
@@ -65,10 +72,9 @@ public class CategoryView extends MainUI {
 
         // Text Fields
         tName = new TextField();
-        tName.setMaxWidth(320);
 
         tDescription = new TextArea();
-        tDescription.setMaxWidth(320);
+        tDescription.setWrapText(true);
         tDescription.setMinHeight(100);
 
         // CheckBox
@@ -160,7 +166,7 @@ public class CategoryView extends MainUI {
 
         // Status Column
         colStatus = new TableColumn<>("Status");
-        colStatus.setCellValueFactory(new PropertyValueFactory<>("statusName"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colStatus.setPrefWidth(60);
 
         // Created At Column
@@ -200,11 +206,11 @@ public class CategoryView extends MainUI {
 
                 delete.setOnMouseClicked(e -> {
                     Category category = getTableView().getItems().get(getIndex());
-                    if (showDeleteConfirmation()) {
+                    if (confirm.showConfirmation("Are you sure you want to delete this category? ")) {
                         if (CategoryController.delete(category.getId())) {
                             getTableView().getItems().remove(category);
                         } else {
-                            showError("Failed to delete the category.");
+                            confirm.showError("Failed to delete the category.");
                         }
                     }
                 });
@@ -328,27 +334,12 @@ public class CategoryView extends MainUI {
     
     public void cleanText() 
 	{
-
 		gettName().setText("");
 		gettDescription().setText("");
+		cbStatus.setSelected(true);
 	}
     
-    private boolean showDeleteConfirmation() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this category?", ButtonType.YES, ButtonType.NO);
-        alert.setHeaderText(null);
-        alert.showAndWait();
-        return alert.getResult() == ButtonType.YES;
-    }
     
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-
-
     // Getters and Setters
     public Label getlName() {
         return lName;
@@ -430,13 +421,7 @@ public class CategoryView extends MainUI {
         this.tvCategories = tvCategories;
     }
 
-    public TableColumn<Category, Integer> getColStatus() {
-        return colStatus;
-    }
-
-    public void setColStatus(TableColumn<Category, Integer> colStatus) {
-        this.colStatus = colStatus;
-    }
+    
 
     public TableColumn<Category, String> getColName() {
         return colName;

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class Validator {
 
     private final Map<String, String> errors = new HashMap<>();
-    
+
     public Validator() {}
 
     public Map<String, String> validate(Map<String, String> inputs, Map<String, String> rules) {
@@ -46,13 +46,15 @@ public class Validator {
                 addError(field, capitalize(field) + " must be a number.");
             } else if (rule.equals("email") && !isValidEmail(value)) {
                 addError(field, capitalize(field) + " must be a valid email address.");
+            } else if (rule.equals("phone") && !isValidPhone(value)) {
+                addError(field, capitalize(field) + " must be a valid phone number.");
             } else if (rule.startsWith("unique:")) {
-            	String[] parts = rule.split(":")[1].split(",");
+                String[] parts = rule.split(":")[1].split(",");
                 String tableName = parts[0];
                 String column = parts[1];
                 String id = parts.length > 2 ? parts[2] : null;
-                
-                if (isDuplicateInTable(tableName,column, value,id)) {
+
+                if (isDuplicateInTable(tableName, column, value, id)) {
                     addError(field, capitalize(field) + " must be unique.");
                 }
             }
@@ -60,15 +62,20 @@ public class Validator {
     }
 
     private boolean isNumeric(String value) {
-        return value.matches("\\d+");
+        return value.matches("[+-]?\\d+(\\.\\d+)?");
     }
 
     private boolean isValidEmail(String value) {
-        return Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$").matcher(value).matches();
+        return Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$").matcher(value).matches();
     }
 
-    private boolean isDuplicateInTable(String tableName,String column, String value ,String id) {
-        return SystemModel.isExist(column, value, tableName,id);
+    private boolean isValidPhone(String value) {
+        // Phone number must start with '09' and be exactly 11 digits
+        return Pattern.compile("^09\\d{9}$").matcher(value).matches();
+    }
+
+    private boolean isDuplicateInTable(String tableName, String column, String value, String id) {
+        return SystemModel.isExist(column, value, tableName, id);
     }
 
     private void addError(String field, String message) {

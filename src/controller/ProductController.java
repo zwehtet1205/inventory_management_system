@@ -1,5 +1,6 @@
 package controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import model.Product;
@@ -17,8 +18,8 @@ public class ProductController {
 	}
 	
 	// store product
-	public static boolean add(String code, String name, int category_id, int quantity, 
-	                           double cost_price, double selling_price, int status_id, int created_by) {
+	public static boolean addProduct(String code, String name, int category_id, int quantity, 
+			BigDecimal cost_price, BigDecimal selling_price, int status_id, int created_by) {
 		Product product = new Product();
 		product.setCode(code);
 		product.setName(name);
@@ -28,13 +29,15 @@ public class ProductController {
 		product.setSelling_price(selling_price);
 		product.setStatus_id(status_id);
 		product.setCreated_by(created_by);
+		product.setCreated_at(new java.util.Date());
+		product.setUpdated_at(new java.util.Date());
 		
-		return product.save();
+		return product.add(product);
 	}
 	
 	// update product
-	public static boolean update(int id, String code, String name, int category_id, int quantity, 
-	                             double cost_price, double selling_price, int status_id) {
+	public static boolean updateProduct(int id, String code, String name, int category_id, int quantity, 
+			BigDecimal cost_price, BigDecimal selling_price, int status_id) {
 		Product product = Product.findOrFail(Product.class, id);
 		product.setCode(code);
 		product.setName(name);
@@ -44,15 +47,17 @@ public class ProductController {
 		product.setSelling_price(selling_price);
 		product.setStatus_id(status_id);
 		
-		return product.save();
+		product.setUpdated_at(new java.util.Date());
+		
+		return product.update(product);
 	}
 	
 	// delete product
-//	public static boolean delete(int id) {
-//		Product product = Product.findOrFail(Product.class, id);
-//		
-//		return product.delete();
-//	}
+	public static boolean delete(int id) {
+		Product product = Product.findOrFail(Product.class, id);
+		
+		return product.delete(product);
+	}
 	
     // check exist 
  	public static boolean exist(int id) {

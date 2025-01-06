@@ -35,7 +35,9 @@ public class Status extends SystemModel<Status> {
 	}
 	
 	
-	
+	public String toString() {
+		return this.name;
+	}
 	
 	
 	

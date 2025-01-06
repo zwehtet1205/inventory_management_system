@@ -16,32 +16,35 @@ public class WarehouseController {
     }
 
     // Add a new warehouse
-    public static boolean add(String name, int status_id, String location, int created_by) {
+    public static boolean addWarehouse(String name,  String location,int status_id, int created_by) {
         Warehouse warehouse = new Warehouse();
         warehouse.setName(name);
         warehouse.setStatus_id(status_id);
         warehouse.setLocation(location);
         warehouse.setCreated_by(created_by);
+        warehouse.setCreated_at(new java.util.Date());
+        warehouse.setUpdated_at(new java.util.Date());
         
-        return warehouse.save();
+        return warehouse.add(warehouse);
     }
 
     // Update warehouse details
-    public static boolean update(int id, String name, int status_id, String location) {
+    public static boolean updateWarehouse(int id, String name,  String location , int status_id) {
         Warehouse warehouse = Warehouse.findOrFail(Warehouse.class, id);
         warehouse.setName(name);
         warehouse.setStatus_id(status_id);
         warehouse.setLocation(location);
+        warehouse.setUpdated_at(new java.util.Date());
         
-        return warehouse.save();
+        return warehouse.update(warehouse);
     }
 
     // Delete warehouse by ID
-//    public static boolean delete(int id) {
-//        Warehouse warehouse = Warehouse.findOrFail(Warehouse.class, id);
-//        
-//        return warehouse.delete();
-//    }
+    public static boolean delete(int id) {
+        Warehouse warehouse = Warehouse.findOrFail(Warehouse.class, id);
+        
+        return warehouse.delete(warehouse);
+    }
 
     // Check if warehouse exists
     public static boolean exist(int id) {

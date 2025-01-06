@@ -634,6 +634,48 @@ public abstract class SystemModel<T> {
         return isSuccess;
     }
     
+    // Method to fetch enum values from a specific table and column
+    public static List<String> getEnumValues(String tableName, String columnName) {
+        List<String> enumValues = new ArrayList<>();
+
+        String sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME = ?";
+
+        try {
+            if (!openConnection()) {
+                throw new SQLException("Failed to open database connection");
+            }
+
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, tableName);
+                ps.setString(2, columnName);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String columnType = rs.getString("COLUMN_TYPE");
+
+                        if (columnType.startsWith("enum(")) {
+                            // Extract values between the parentheses and split them by comma
+                            String values = columnType.substring(5, columnType.length() - 1);
+                            String[] items = values.split(",");
+                            
+                            for (String item : items) {
+                                enumValues.add(item.replace("'", ""));
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return enumValues;
+    }
+
+    
+    
 	public Class<T> getClazz() {
 		return clazz;
 	}

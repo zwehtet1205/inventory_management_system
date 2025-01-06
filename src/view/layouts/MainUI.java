@@ -2,9 +2,14 @@ package view.layouts;
 
 import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
+import org.controlsfx.control.textfield.TextFields;
+
+import controller.ProductController;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,12 +19,15 @@ import libraries.Icon;
 
 import view.products.*;
 import view.templates.Breadcrumb;
+import view.users.UserView;
+import view.warehouses.WarehouseView;
 import view.categories.*;
+import view.people.PersonView;
 
 
 public class MainUI {
     private Scene mainScene;
-    private Label lAppName, lDashboard, lProducts, lSuppliers, lCustomers, lPurchases, lSales, lCategories, lWarehouses, lUsers, lLogouts, lNotification, lUsername, username;
+    private Label lAppName, lDashboard, lProducts, lPeople, lCustomers, lPurchases, lSales, lCategories, lWarehouses, lUsers, lLogouts, lNotification, lUsername, username;
     private TextField tSearch;
     private Button btnSearch;
 
@@ -50,7 +58,7 @@ public class MainUI {
         lAppName = new Label("  Inventory Management System");
         lDashboard = new Label("  Dashboard");
         lProducts = new Label("  Products");
-        lSuppliers = new Label("  Suppliers");
+        lPeople = new Label("  People");
         lCustomers = new Label("  Customers");
         lPurchases = new Label("  Purchases");
         lSales = new Label("  Sales");
@@ -67,6 +75,8 @@ public class MainUI {
         // Search bar
         tSearch = new TextField();
         tSearch.setPromptText("Search Something...");
+        
+        
 
         btnSearch = new Button("Search");
         
@@ -74,8 +84,8 @@ public class MainUI {
         lAppName.setGraphic(Icon.get("inventory-management", 35));
 		lDashboard.setGraphic(Icon.get("dashboard",30));
 		lProducts.setGraphic(Icon.get("product",30));
-		lSuppliers.setGraphic(Icon.get("supplier",30));
-		lCustomers.setGraphic(Icon.get("customer",30));
+		lPeople.setGraphic(Icon.get("people",30));
+//		lCustomers.setGraphic(Icon.get("customer",30));
 		lPurchases.setGraphic(Icon.get("purchase",30));
 		lSales.setGraphic(Icon.get("sale",30));
 		lCategories.setGraphic(Icon.get("category",30));
@@ -88,13 +98,13 @@ public class MainUI {
 		
 		
 		
-		menuItems = Arrays.asList(lDashboard,lProducts,lSuppliers,lCustomers,lPurchases,lSales,lCategories,lWarehouses,lUsers);
+		menuItems = Arrays.asList(lDashboard,lProducts,lPeople,lPurchases,lSales,lCategories,lWarehouses,lUsers);
 		
     }
 
     private void createLayoutStructure() {
         // Sidebar
-        VBox navItems = new VBox(0, lDashboard, lProducts, lSuppliers, lCustomers, lPurchases, lSales, lCategories, lWarehouses, lUsers);
+        VBox navItems = new VBox(0, lDashboard, lProducts, lPeople, lPurchases, lSales, lCategories, lWarehouses, lUsers);
         VBox logoutItem = new VBox(lLogouts);
         sidebar = new VBox(100, navItems, logoutItem);
         sidebar.setPrefWidth(250);
@@ -145,7 +155,7 @@ public class MainUI {
         
         lDashboard.getStyleClass().add("nav-item");
         lProducts.getStyleClass().add("nav-item");
-        lSuppliers.getStyleClass().add("nav-item");
+        lPeople.getStyleClass().add("nav-item");
         lCustomers.getStyleClass().add("nav-item");
         lPurchases.getStyleClass().add("nav-item");
         lSales.getStyleClass().add("nav-item");
@@ -157,15 +167,27 @@ public class MainUI {
     
     public void setActions() {
     	lDashboard.setOnMouseClicked(e -> {
-    		layout.setCenter(new AddProduct().getContent());
+    		
     	});
     	lProducts.setOnMouseClicked(e -> {
     		layout.setCenter(new ProductView().getContent());
     		setActive(menuItems,lProducts);
     	});
+    	lPeople.setOnMouseClicked(e -> {
+    		layout.setCenter(new PersonView().getContent());
+    		setActive(menuItems,lPeople);
+    	});
     	lCategories.setOnMouseClicked(e -> {
     		layout.setCenter(new CategoryView().getContent());
     		setActive(menuItems,lCategories);
+    	});
+    	lWarehouses.setOnMouseClicked(e -> {
+    		layout.setCenter(new WarehouseView().getContent());
+    		setActive(menuItems,lWarehouses);
+    	});
+    	lUsers.setOnMouseClicked(e -> {
+    		layout.setCenter(new UserView().getContent());
+    		setActive(menuItems,lUsers);
     	});
     }
     

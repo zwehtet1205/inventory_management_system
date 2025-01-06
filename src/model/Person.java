@@ -79,7 +79,26 @@ public class Person extends SystemModel<Person> {
 		this.updated_at = updated_at;
 	}
 	
+	public Contact getContact()
+	{
+		return SystemModel.findOrFail(Contact.class, contact_id);
+	}
 	
+	public String getEmail() {
+		return getContact().getEmail();
+	}
+	
+	public String getPhone() {
+		return getContact().getPhone();
+	}
+	
+	public String getAddress() {
+		return getContact().getAddress();
+	}
+	
+	public Status getStatus() {
+		return SystemModel.findOrFail(Status.class,status_id);
+	}
 
 	
 	

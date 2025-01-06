@@ -31,6 +31,6 @@ replay_pid*
 *.settings/*.*
 *.classpath
 
-util/
+util/Config.java
 
 

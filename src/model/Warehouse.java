@@ -45,6 +45,10 @@ public class Warehouse extends SystemModel<Warehouse> {
 	public void setStatus_id(int status_id) {
 		this.status_id = status_id;
 	}
+	
+	public Status getStatus() {
+		return SystemModel.findOrFail(Status.class, status_id);
+	}
 	public String getLocation() {
 		return location;
 	}
