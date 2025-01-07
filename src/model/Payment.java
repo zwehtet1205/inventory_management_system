@@ -9,7 +9,7 @@ public class Payment extends SystemModel<Payment> {
 	private int status_id;
 	
 	public Payment() {
-		super(Payment.class,"payment_methods");
+		super(Payment.class,"payments");
 	}
 	
 	public Payment(int id,String name,int status_id)

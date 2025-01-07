@@ -1,0 +1,28 @@
+.content{
+	-fx-background-color: #fff;
+	-fx-padding: 20;
+}
+
+.header{
+	-fx-text-fill: #736CED;
+	-fx-font-size: 30;
+	-fx-font-weight: bold;
+}
+
+.tags{
+	-fx-font-size: 18;
+}
+
+.input{
+	-fx-font-size: 18;
+}
+
+.btn{
+	-fx-background-color: #9f9fED;
+	-fx-padding: 10 30;
+	-fx-text-fill : #FFF;
+}
+
+.btn:hover{
+	-fx-background-color: #736CED;
+}

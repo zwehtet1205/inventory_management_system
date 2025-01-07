@@ -75,7 +75,7 @@ public class PersonView extends MainUI {
     	lAddress = new Label("Address");
     	lStatus = new Label("Status");
     	lTitle = new Label("  People");
-    	lAddPerson = new Label("  Add Person");
+    	lAddPerson = new Label("  New Person");
     	
     	// error message 
     	lNameErr = new Label();

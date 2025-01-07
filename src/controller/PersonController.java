@@ -16,6 +16,11 @@ public class PersonController {
     public static Person get(int id) {
         return Person.findOrFail(Person.class, id); 
     }
+    
+    // Get specific person by ID
+    public static Person get(String column,String value) {
+        return Person.findOrFail(Person.class, column, value); 
+    }
 
     // Add a new person
     public static boolean addPerson(String name, String person_type, int contact_id, int status_id, int created_by) {

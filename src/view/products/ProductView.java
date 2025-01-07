@@ -111,7 +111,7 @@ public class ProductView extends MainUI {
         btnAdd = new Button("Add");
         btnUpdate = new Button("Add");
         
-        lAddProduct = new Label("  Add Product");
+        lAddProduct = new Label("  New Product");
         
         lAddProduct.setGraphic(Icon.get("circle",25));
         

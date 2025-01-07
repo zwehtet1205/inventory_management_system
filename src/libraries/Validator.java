@@ -57,7 +57,16 @@ public class Validator {
                 if (isDuplicateInTable(tableName, column, value, id)) {
                     addError(field, capitalize(field) + " must be unique.");
                 }
+            } else if (rule.startsWith("exist:")) {
+                String[] parts = rule.split(":")[1].split(",");
+                String tableName = parts[0];
+                String column = parts[1];
+
+                if (!existsInTable(tableName, column, value)) {
+                    addError(field, capitalize(field) + " does not exist.");
+                }
             }
+            
         }
     }
 
@@ -77,6 +86,11 @@ public class Validator {
     private boolean isDuplicateInTable(String tableName, String column, String value, String id) {
         return SystemModel.isExist(column, value, tableName, id);
     }
+    
+    private boolean existsInTable(String tableName, String column, String value) {
+        return SystemModel.isExist(column, value, tableName);
+    }
+
 
     private void addError(String field, String message) {
         if (!errors.containsKey(field)) {

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import model.Invoice;
+import model.User;
 
 public class InvoiceController {
 
@@ -16,32 +17,40 @@ public class InvoiceController {
     public static Invoice get(int id) {
         return Invoice.findOrFail(Invoice.class, id); 
     }
+    
+    public static Invoice get(String invoiceNumber)
+    {
+    	return Invoice.findOrFail(Invoice.class, "invoice_number",invoiceNumber);
+    }
 
     // Add a new invoice
-    public static boolean add(String invoiceNumber, Date invoiceDate, int payment_method_id, double discount, 
+    public static boolean addInvoice(String invoiceNumber, Date invoiceDate,String type, int payment_method_id,  
                               int status, int created_by) {
         Invoice invoice = new Invoice();
         invoice.setInvoiceNumber(invoiceNumber);
         invoice.setInvoiceDate(invoiceDate);
+        invoice.setType(type);
         invoice.setPayment_method_id(payment_method_id);
-        invoice.setDiscount(discount);
         invoice.setStatus(status);
         invoice.setCreated_by(created_by);
+        invoice.setCreated_at(new java.util.Date());
+        invoice.setUpdated_at(new java.util.Date());
         
-        return invoice.save();
+        return invoice.add(invoice);
     }
 
     // Update invoice details
-    public static boolean update(int id, String invoiceNumber, Date invoiceDate, int payment_method_id, double discount, 
+    public static boolean updateInvoice(int id, String invoiceNumber, Date invoiceDate,String type, int payment_method_id,  
                                  int status) {
         Invoice invoice = Invoice.findOrFail(Invoice.class, id);
         invoice.setInvoiceNumber(invoiceNumber);
         invoice.setInvoiceDate(invoiceDate);
         invoice.setPayment_method_id(payment_method_id);
-        invoice.setDiscount(discount);
+        invoice.setType(type);
         invoice.setStatus(status);
+        invoice.setUpdated_at(new java.util.Date());
         
-        return invoice.save();
+        return invoice.update(invoice);
     }
 
     // Delete invoice by ID
@@ -55,4 +64,9 @@ public class InvoiceController {
  	public static boolean exist(int id) {
  		return Invoice.isExist("id", id, "invoices");
  	}
+ 	
+ 	// get Enum 
+ 	public static List<String> getEnums(){
+    	return Invoice.getEnumValues("invoices", "type");
+    }
 }

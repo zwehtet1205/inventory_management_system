@@ -22,12 +22,13 @@ import view.templates.Breadcrumb;
 import view.users.UserView;
 import view.warehouses.WarehouseView;
 import view.categories.*;
+import view.invoices.InvoiceView;
 import view.people.PersonView;
 
 
 public class MainUI {
     private Scene mainScene;
-    private Label lAppName, lDashboard, lProducts, lPeople, lCustomers, lPurchases, lSales, lCategories, lWarehouses, lUsers, lLogouts, lNotification, lUsername, username;
+    private Label lAppName, lDashboard, lProducts, lPeople, lInvoices, lPurchases, lSales, lCategories, lWarehouses, lUsers, lLogouts, lNotification, lUsername, username;
     private TextField tSearch;
     private Button btnSearch;
 
@@ -59,7 +60,7 @@ public class MainUI {
         lDashboard = new Label("  Dashboard");
         lProducts = new Label("  Products");
         lPeople = new Label("  People");
-        lCustomers = new Label("  Customers");
+        lInvoices = new Label("  Invoices");
         lPurchases = new Label("  Purchases");
         lSales = new Label("  Sales");
         lCategories = new Label("  Categories");
@@ -85,7 +86,7 @@ public class MainUI {
 		lDashboard.setGraphic(Icon.get("dashboard",30));
 		lProducts.setGraphic(Icon.get("product",30));
 		lPeople.setGraphic(Icon.get("people",30));
-//		lCustomers.setGraphic(Icon.get("customer",30));
+		lInvoices.setGraphic(Icon.get("invoice",30));
 		lPurchases.setGraphic(Icon.get("purchase",30));
 		lSales.setGraphic(Icon.get("sale",30));
 		lCategories.setGraphic(Icon.get("category",30));
@@ -98,13 +99,13 @@ public class MainUI {
 		
 		
 		
-		menuItems = Arrays.asList(lDashboard,lProducts,lPeople,lPurchases,lSales,lCategories,lWarehouses,lUsers);
+		menuItems = Arrays.asList(lDashboard,lProducts,lPeople,lInvoices,lPurchases,lSales,lCategories,lWarehouses,lUsers);
 		
     }
 
     private void createLayoutStructure() {
         // Sidebar
-        VBox navItems = new VBox(0, lDashboard, lProducts, lPeople, lPurchases, lSales, lCategories, lWarehouses, lUsers);
+        VBox navItems = new VBox(0, lDashboard, lProducts, lPeople,lInvoices, lPurchases, lSales, lCategories, lWarehouses, lUsers);
         VBox logoutItem = new VBox(lLogouts);
         sidebar = new VBox(100, navItems, logoutItem);
         sidebar.setPrefWidth(250);
@@ -156,7 +157,7 @@ public class MainUI {
         lDashboard.getStyleClass().add("nav-item");
         lProducts.getStyleClass().add("nav-item");
         lPeople.getStyleClass().add("nav-item");
-        lCustomers.getStyleClass().add("nav-item");
+        lInvoices.getStyleClass().add("nav-item");
         lPurchases.getStyleClass().add("nav-item");
         lSales.getStyleClass().add("nav-item");
         lCategories.getStyleClass().add("nav-item");
@@ -176,6 +177,11 @@ public class MainUI {
     	lPeople.setOnMouseClicked(e -> {
     		layout.setCenter(new PersonView().getContent());
     		setActive(menuItems,lPeople);
+    	});
+    	
+    	lInvoices.setOnMouseClicked(e -> {
+    		layout.setCenter(new InvoiceView().getContent());
+    		setActive(menuItems,lInvoices);
     	});
     	lCategories.setOnMouseClicked(e -> {
     		layout.setCenter(new CategoryView().getContent());

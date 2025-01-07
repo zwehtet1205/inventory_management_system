@@ -9,8 +9,8 @@ public class Invoice extends SystemModel<Invoice>{
 	private int id;
 	private String invoiceNumber;
 	private Date invoiceDate;
+	private String type;
 	private int payment_method_id;
-	private double discount;
 	private int status;
 	private int created_by;
 	private Date created_at;
@@ -20,14 +20,14 @@ public class Invoice extends SystemModel<Invoice>{
 		super(Invoice.class,"invoices");
 	}
 	
-	public Invoice(int id, String invoiceNumber, Date invoiceDate, int payment_method_id, double discount, int status,
+	public Invoice(int id, String invoiceNumber, Date invoiceDate,String type, int payment_method_id, int status,
 			int created_by, Date created_at, Date updated_at) {
 		this();
 		this.id = id;
 		this.invoiceNumber = invoiceNumber;
 		this.invoiceDate = invoiceDate;
 		this.payment_method_id = payment_method_id;
-		this.discount = discount;
+		this.type = type;
 		this.status = status;
 		this.created_by = created_by;
 		this.created_at = created_at;
@@ -57,12 +57,15 @@ public class Invoice extends SystemModel<Invoice>{
 	public void setPayment_method_id(int payment_method_id) {
 		this.payment_method_id = payment_method_id;
 	}
-	public double getDiscount() {
-		return discount;
+	
+	public String getType() {
+		return type;
 	}
-	public void setDiscount(double discount) {
-		this.discount = discount;
+
+	public void setType(String type) {
+		this.type = type;
 	}
+
 	public int getStatus() {
 		return status;
 	}

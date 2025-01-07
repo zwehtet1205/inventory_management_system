@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.List;
+
+import libraries.SystemModel;
 import model.Warehouse;
 
 public class WarehouseController {
@@ -8,6 +10,12 @@ public class WarehouseController {
     // Get all warehouses
     public static List<Warehouse> getAllWarehouses() {
         return Warehouse.getAll(Warehouse.class); 
+    }
+    
+    // get all active warehouses 
+    public static List<Warehouse> getAllActiveWarehouses(){
+    	SystemModel.where("status_id", "=", "1");
+    	return Warehouse.get(Warehouse.class);
     }
 
     // Get specific warehouse by ID
@@ -50,4 +58,6 @@ public class WarehouseController {
     public static boolean exist(int id) {
         return Warehouse.isExist("id", id, "warehouses");
     }
+    
+    
 }

@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.List;
+
+import libraries.SystemModel;
 import model.Payment;
 
 public class PaymentController {
@@ -8,6 +10,11 @@ public class PaymentController {
     // Get all payment methods
     public static List<Payment> getAllPayments() {
         return Payment.getAll(Payment.class); 
+    }
+    
+    public static List<Payment> getAllActivePayments(){
+    	SystemModel.where("status_id", "=", "1");
+    	return Payment.get(Payment.class);
     }
 
     // Get specific payment method by ID
